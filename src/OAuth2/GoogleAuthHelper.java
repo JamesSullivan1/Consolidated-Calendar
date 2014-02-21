@@ -24,11 +24,11 @@ import java.util.Collection;
  */
 public final class GoogleAuthHelper {
 
-	private static final String CLIENT_ID = "271609766283.apps.googleusercontent.com";
-	private static final String CLIENT_SECRET = "YvxODlkdMOHVvrK-GyrOnzm6";
+	private static final String CLIENT_ID = "956173815322-2uhf88measmqiucl6682187t6dp2bdu6.apps.googleusercontent.com";
+	private static final String CLIENT_SECRET = "USwY2ADR7v40DvxbF19SE8X1";
 	
 	private static final Iterable<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email".split(";"));
-	private static final String CALLBACK_URI = "http://localhost:8080/Consolidated-Cal/HelloWorld.jsp";
+	private static final String CALLBACK_URI = "http://localhost:8080/Consolidated-Cal/index.jsp";
     private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
