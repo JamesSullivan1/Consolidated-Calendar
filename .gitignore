@@ -1,2 +1,5 @@
 /build
-/.google-apis
+/.google_apis
+/.settings
+.classpath
+.project
