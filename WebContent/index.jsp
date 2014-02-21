@@ -12,25 +12,6 @@ body {
 	font-family: Sans-Serif;
 	margin: 1em;
 }
-.auth a {
-	display: block;
-	border-style: solid;
-	border-color: #bbb #888 #666 #aaa;
-	border-width: 1px 2px 2px 1px;
-	background: #ccc;
-	color: #333;
-	line-height: 2;
-	text-align: center;
-	text-decoration: none;
-	font-weight: 900;
-	width: 13em;
-}
-
-.auth a:active {
-	border-color: #666 #aaa #bbb #888;
-	border-width: 2px 1px 1px 2px;
-	color: #000;
-}
 </style>
 </head>
 <body>
@@ -58,13 +39,16 @@ body {
 
 			session.removeAttribute("state");
 
+			String userInfo = helper.getUserInfoJson(request.getParameter("code"));
+			
+			out.println("Successful login to Google. Here is some basic user info.");
 			/*
 			 * Once the user is authenticated, print out some basic user
 			 * information in JSON format to verify that the authentication 
 			 * worked.
 			 */
 			out.println("<pre>");
-			out.println(helper.getUserInfoJson(request.getParameter("code")));
+			out.println(userInfo);
 			out.println("</pre>");
 		}
 	%>

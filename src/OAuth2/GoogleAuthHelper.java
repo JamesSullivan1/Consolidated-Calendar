@@ -24,13 +24,19 @@ import java.util.Collection;
  */
 public final class GoogleAuthHelper {
 
+	// Application specific values for ID and Secret
 	private static final String CLIENT_ID = "956173815322-2uhf88measmqiucl6682187t6dp2bdu6.apps.googleusercontent.com";
 	private static final String CLIENT_SECRET = "USwY2ADR7v40DvxbF19SE8X1";
 	
+	// Scope declaration for authentication access
 	private static final Iterable<String> SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile;https://www.googleapis.com/auth/userinfo.email".split(";"));
+	// Return URI for google
 	private static final String CALLBACK_URI = "http://localhost:8080/Consolidated-Cal/index.jsp";
-    private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
-    private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    // Redirect to google user info page
+	private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
+    
+	
+	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     
     private String stateToken;
@@ -39,6 +45,7 @@ public final class GoogleAuthHelper {
     
     /**
      * Constructor to initialize the Google Authentication Code Flow with CLIENT_ID, SECRET, and SCOPE
+     * using an HTTP_TRANSPORT and JSON_FACTORY.
      */
     public GoogleAuthHelper() {
     	flow = new GoogleAuthorizationCodeFlow.Builder(
@@ -83,11 +90,13 @@ public final class GoogleAuthHelper {
 	/**
 	 * Expects an Authentication Code, and makes an authenticated request for the user's profile information
 	 * @return JSON formatted user profile information
-	 * @param authCode authentication code provided by google
+	 * @param authCode authentication code provided by Google
 	 */
 	public String getUserInfoJson(final String authCode) throws IOException {
 
+		// Gets a response token from Google
 		final GoogleTokenResponse response = flow.newTokenRequest(authCode).setRedirectUri(CALLBACK_URI).execute();
+		// Construct a credentials request
 		final Credential credential = flow.createAndStoreCredential(response, null);
 		final HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(credential);
 		// Make an authenticated request
