@@ -1,3 +1,4 @@
+package server;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -5,7 +6,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public final class ICSFeedParser {
-	public static ArrayList ParseFeed(String link) throws FileNotFoundException{
+	public static ArrayList<String> ParseFeed(String link) throws FileNotFoundException{
 		File feed = new File(link);
 		Scanner parser = new Scanner(feed);
 		parser.useDelimiter(Pattern.compile("\\n"));
@@ -14,7 +15,7 @@ public final class ICSFeedParser {
 		String calname = null;
 		String[] splitter = null;
 		String eventData[] = new String[4];
-		ArrayList parseData = new ArrayList();
+		ArrayList<String> parseData = new ArrayList<String>();
 		boolean flag = false;
 		
 		while(parser.hasNext()){
@@ -49,15 +50,22 @@ public final class ICSFeedParser {
 					eventData[3] = splitter[1];
 				}else if(current.equals("END:VEVENT\r")){
 					flag = false;
-					parseData.add(eventData);
+					for (int i = 0; i < eventData.length; i++) {
+						parseData.add(eventData[i]);
+					}
 				}
 				
 			}
 		}
 		parser.close();
-		System.out.println(parseData.get(0));
-		System.out.println(parseData.get(1));
-		System.out.println(parseData.get(2));
 		return parseData;
 	}
+	
+//	public ArrayList<String> getCalendarData(ArrayList<String> rawData) {
+//		
+//	}
+//	
+//	public ArrayList<Event> getEvents(ArrayList<String> rawData) {
+//		
+//	}
 }
