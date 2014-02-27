@@ -91,6 +91,24 @@ public final class GoogleAuthHelper {
 	public String getStateToken() {
 		return stateToken;
 	}
+	
+	/**
+	 * Uses a given authentication code to request and return an authentication
+	 * token which can be used to push and pull data from Google.
+	 * 
+	 * @param authCode authentication code provided by google
+	 * @return Authentication token wrapped in a credential object.
+	 * @throws IOException 
+	 */
+	public Credential getAuthToken(final String authCode) throws IOException {
+		// Gets a response token from Google
+		final GoogleTokenResponse response = flow.newTokenRequest(authCode)
+				.setRedirectUri(CALLBACK_URI).execute();
+		// Construct a credentials request
+		final Credential credential = flow.createAndStoreCredential(response,
+				null);
+		return credential;
+	}
 
 	/**
 	 * Expects an Authentication Code, and makes an authenticated request for
@@ -98,18 +116,13 @@ public final class GoogleAuthHelper {
 	 * 
 	 * @return JSON formatted Calendar List.
 	 * @param authCode
-	 *            authentication code provided by Google
+	 *            authentication credential provided by Google
 	 */
-	public String getCalendarListJson(final String authCode) throws IOException {
-
-		// Gets a response token from Google
-		final GoogleTokenResponse response = flow.newTokenRequest(authCode)
-				.setRedirectUri(CALLBACK_URI).execute();
-		// Construct a credentials request
-		final Credential credential = flow.createAndStoreCredential(response,
-				null);
+	public String getCalendarListJson(final Credential credential) throws IOException {
+		// Construct http request.
 		final HttpRequestFactory requestFactory = HTTP_TRANSPORT
 				.createRequestFactory(credential);
+		
 		// Make an authenticated request
 		final GenericUrl url = new GenericUrl(CALENDAR_LIST_URL);
 		final HttpRequest request = requestFactory.buildGetRequest(url);
@@ -117,7 +130,6 @@ public final class GoogleAuthHelper {
 		final String jsonIdentity = request.execute().parseAsString();
 
 		return jsonIdentity;
-
 	}
 
 }

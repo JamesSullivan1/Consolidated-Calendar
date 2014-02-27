@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="server.oauth.GoogleAuthHelper"%>
+<%@ page import="server.web.IndexHelper" %>
 
 <%! static String pageTarget; %>
+
+<% IndexHelper.processGoogleAuth(request, session, out); %>
 
 <%
 pageTarget = (String)request.getParameter("page_target");
