@@ -1,6 +1,8 @@
 package server.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import com.google.api.client.auth.oauth2.Credential;
@@ -45,4 +47,27 @@ public class FeedSelectionHelper
 		out.println(calendarList);
 		out.println("</pre>");
 	}
+	
+	/**
+	 * @param request
+	 * @param session
+	 */
+	public static void editICSFeeds(HttpServletRequest request, HttpSession session)
+		{
+		//Get current feed list if it exists.
+		ArrayList<String> icsList = (ArrayList<String>)session.getAttribute("icsList");
+		if (icsList == null)
+			icsList = new ArrayList<String>();
+		
+		String newFeed = request.getParameter("addICS");
+		if (newFeed != null)
+			if (!icsList.contains(newFeed))
+				icsList.add(newFeed);
+		
+		String removeFeed = (String)request.getParameter("removeICS");
+		if (removeFeed != null)
+			icsList.remove(removeFeed);
+		
+		session.setAttribute("icsList", icsList);
+		}
 }
