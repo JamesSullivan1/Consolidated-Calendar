@@ -30,8 +30,7 @@ public class Event {
 	 * @param endDate
 	 *            The ending date of the Event
 	 */
-	public Event(String name, String description, String location,
-			Calendar owner, Date startDate, Date endDate) {
+	public Event(String name, String location, Date startDate, Date endDate) {
 		this.name = name;
 		this.description = description;
 		this.location = location;
@@ -84,12 +83,24 @@ public class Event {
 
 	/**
 	 * Sets the Calendar that owns the Event.
-	 * @param owner The Calendar to own the Event.
+	 * 
+	 * @param owner
+	 *            The Calendar to own the Event.
 	 */
 	public void setOwner(Calendar owner) {
 		this.owner = owner;
 	}
-	
+
+	/**
+	 * Sets Event's description
+	 * 
+	 * @param Description
+	 *            a string description.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String toString() {
 		return name;
 	}

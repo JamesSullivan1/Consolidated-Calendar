@@ -62,7 +62,7 @@ public class Calendar {
 	 */
 	public void addEvent(Event event) {
 		// Some code
-		event.setOwner(this);	
+		event.setOwner(this);
 	}
 
 	/**
