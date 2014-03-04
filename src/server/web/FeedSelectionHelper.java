@@ -9,8 +9,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import server.oauth.GoogleAuthHelper;
 
 
-public class FeedSelectionHelper
-	{
+public class FeedSelectionHelper {
 	
 	/**
 	 * Displays google sign in link.
@@ -62,7 +61,10 @@ public class FeedSelectionHelper
 		String newFeed = request.getParameter("addICS");
 		if (newFeed != null)
 			if (!icsList.contains(newFeed))
-				icsList.add(newFeed);
+				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) //Some initial weak ics url validation.
+					icsList.add(newFeed);
+				else
+					session.setAttribute("badFeed", true);
 		
 		String removeFeed = (String)request.getParameter("removeICS");
 		if (removeFeed != null)

@@ -38,4 +38,15 @@ public class IndexHelper {
 		else
 			out.println("No auth code to read.");
 	}
+	
+	public static void processPageTarget(HttpServletRequest request, HttpSession session) {
+		String pageTarget = (String)request.getParameter("pageTarget");
+		if (pageTarget == null) {
+			pageTarget = (String)session.getAttribute("pageTarget");
+			if (pageTarget == null) {
+				pageTarget = "feedSelection.jsp";
+			}
+		}
+		session.setAttribute("pageTarget", pageTarget);
+	}
 }

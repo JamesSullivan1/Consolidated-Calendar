@@ -1,20 +1,13 @@
 <%@ page language="java" contentType="text/html charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="server.oauth.GoogleAuthHelper"%>
 <%@ page import="server.web.IndexHelper" %>
+<%@ page isELIgnored="false" %>
 
 <%! static String pageTarget; %>
 
-<% IndexHelper.processGoogleAuth(request, session, out); %>
-
 <%
-pageTarget = (String)request.getParameter("page_target");
-if (pageTarget == null) {
-	pageTarget = (String)session.getAttribute("page_target");
-	if (pageTarget == null) {
-		pageTarget = "feedSelection.jsp";
-	}
-}
-session.setAttribute("page_target", pageTarget);
+IndexHelper.processGoogleAuth(request, session, out);
+IndexHelper.processPageTarget(request, session);
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -26,7 +19,7 @@ session.setAttribute("page_target", pageTarget);
 </head>
 <body>
 
-<jsp:include page="<%= pageTarget %>" />
+<jsp:include page="${sessionScope.pageTarget}" />
 
 </body>
 </html>
