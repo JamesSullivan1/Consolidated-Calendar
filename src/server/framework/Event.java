@@ -1,4 +1,4 @@
-package server;
+package server.framework;
 
 import java.util.Date;
 
