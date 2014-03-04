@@ -25,7 +25,6 @@ public class IndexHelper {
 		
 		//Google has returned authentication code. Convert and store
 		if (code != null && requestState != null && requestState.equals(sessionState)) {
-			out.println("Found auth code, converting to credential.");
 			session.removeAttribute("stateString");
 			
 			//Convert auth code to auth token.
@@ -35,8 +34,6 @@ public class IndexHelper {
 			//Store token in session.
 			session.setAttribute("authCredential", credential);
 		}
-		else
-			out.println("No auth code to read.");
 	}
 	
 	public static void processPageTarget(HttpServletRequest request, HttpSession session) {
@@ -48,5 +45,10 @@ public class IndexHelper {
 			}
 		}
 		session.setAttribute("pageTarget", pageTarget);
+	}
+	
+	public static void processLogOut(HttpServletRequest request, HttpSession session) {
+		if (request.getParameter("logOut") != null)
+			session.removeAttribute("authCredential");
 	}
 }

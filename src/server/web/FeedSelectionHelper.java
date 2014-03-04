@@ -31,21 +31,21 @@ public class FeedSelectionHelper {
 	 * @param out
 	 * @throws IOException
 	 */
-	public static void showCalendarChoice(HttpSession session, JspWriter out) throws IOException {
-		final GoogleAuthHelper helper = new GoogleAuthHelper();
-		final Credential credential = (Credential)session.getAttribute("authCredential");
-			
-		/*
-		 * Once the user is authenticated, print out some basic user
-		 * information in JSON format to verify that the authentication 
-		 * worked.
-		 */
-		final String calendarList = helper.getCalendarListJson(credential);
-		out.println("Successful login to Google. Below are your calendars in JSON format.");
-		out.println("<pre>");
-		out.println(calendarList);
-		out.println("</pre>");
-	}
+//	public static void showCalendarChoice(HttpSession session, JspWriter out) throws IOException {
+//		final GoogleAuthHelper helper = new GoogleAuthHelper();
+//		final Credential credential = (Credential)session.getAttribute("authCredential");
+//			
+//		/*
+//		 * Once the user is authenticated, print out some basic user
+//		 * information in JSON format to verify that the authentication 
+//		 * worked.
+//		 */
+//		final String calendarList = helper.getCalendarListJson(credential);
+//		out.println("Successful login to Google. Below are your calendars in JSON format.");
+//		out.println("<pre>");
+//		out.println(calendarList);
+//		out.println("</pre>");
+//	}
 	
 	/**
 	 * @param request
