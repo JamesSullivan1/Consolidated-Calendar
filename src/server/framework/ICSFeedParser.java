@@ -40,7 +40,7 @@ public final class ICSFeedParser {
 		return calendarData;
 	}
 
-	public static Event[] getEvents(URL link, Calendar owner) throws FileNotFoundException, IOException {
+	public static ArrayList<Event> getEvents(URL link, Calendar owner) throws FileNotFoundException, IOException {
 		DateFormat df = DateFormat.getDateInstance();
 		Scanner parser = new Scanner(new InputStreamReader(link.openStream()));
 		parser.useDelimiter(Pattern.compile("\\n"));
@@ -97,9 +97,6 @@ public final class ICSFeedParser {
 		}
 		parser.close();
 
-		// Convert to static Event[]
-		Event[] events = new Event[eventList.size()];
-		events = eventList.toArray(events);
-		return events;
+		return eventList;
 	}
 }
