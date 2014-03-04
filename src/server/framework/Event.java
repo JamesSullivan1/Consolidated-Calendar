@@ -27,10 +27,9 @@ public class Event {
 	 * @param endDate
 	 *            The ending date of the Event
 	 */
-	public Event(String name, String location, Date startDate, Date endDate, Calendar owner) {
+	public Event(String name, String location, Date startDate, Date endDate) {
 		this.name = name;
 		this.location = location;
-		this.owner = owner;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
@@ -59,14 +58,14 @@ public class Event {
 	/**
 	 * @return The Start date of the Event
 	 */
-	public Date getStart() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
 	/**
 	 * @return The End date of the Event
 	 */
-	public Date getEnd() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
@@ -80,7 +79,29 @@ public class Event {
 		this.owner = owner;
 	}
 
+	/**
+	 * Returns true if the other event is identical (checks name, start and end
+	 * time).
+	 * 
+	 * @param Event
+	 *            event the event to compare.
+	 * @return True if the events are identical.
+	 */
+	public boolean equals(Event event) {
+		boolean nameEquals = false;
+		boolean startDateEquals = false;
+		boolean endDateEquals = false;
+		if (event.name.equalsIgnoreCase(this.name)) {
+			nameEquals = true;
+		} else if (event.startDate.equals(this.startDate)) {
+			startDateEquals = true;
+		} else if (event.endDate.equals(this.endDate)) {
+			endDateEquals = true;
+		}
+		return nameEquals && startDateEquals && endDateEquals;
+	}
+
 	public String toString() {
-		return name;
+		return name + ":    " + startDate.toString() + " to " + endDate.toString();
 	}
 }

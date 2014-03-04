@@ -1,9 +1,15 @@
 package server.framework;
 
+import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -12,9 +18,34 @@ import java.text.ParseException;
 import java.util.Date;
 
 public final class ICSFeedParser {
+	
+	public static File downloadICSFile(URL link) throws IOException {
+		File f = new File(link + ".ics");
+        URLConnection con; 
+        DataInputStream dis;
+        FileOutputStream fos;
+        byte[] fileData;
+        try {
+            con = link.openConnection();
+            dis = new DataInputStream(con.getInputStream());
+            fileData = new byte[con.getContentLength()];
+            for (int x = 0; x < fileData.length; x++) {
+                fileData[x] = dis.readByte();
+            }
+            dis.close();
+            fos = new FileOutputStream(f); 
+            fos.write(fileData);
+            fos.close();
+        }
+        catch(IOException io) {
+            System.out.println(io);
+        }
+        
+        return f;
+	}
 
-	public static String[] getCalendarData(URL link) throws IOException{
-		Scanner parser = new Scanner(new InputStreamReader(link.openStream()));
+	public static String[] getCalendarData(File f) throws IOException{
+		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
 		String servid = null;
@@ -40,9 +71,9 @@ public final class ICSFeedParser {
 		return calendarData;
 	}
 
-	public static Event[] getEvents(URL link, Calendar owner) throws FileNotFoundException, IOException {
+	public static Event[] getEvents(File f) throws FileNotFoundException, IOException {
 		DateFormat df = DateFormat.getDateInstance();
-		Scanner parser = new Scanner(new InputStreamReader(link.openStream()));
+		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
 		String[] splitter = null;
@@ -88,7 +119,7 @@ public final class ICSFeedParser {
 
 				} else if (current.equals("END:VEVENT\r")) {
 					flag = false;
-					Event e = new Event(eventData[0], eventData[1], start, end, owner);
+					Event e = new Event(eventData[0], eventData[1], start, end);
 					eventList.add(e);
 				}
 
