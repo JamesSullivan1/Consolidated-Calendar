@@ -15,14 +15,6 @@
 	FeedResultsHelper.parseFeeds(request, session);
 %>
 
-<%-- <% --%>
-// Date testDate = new Date(); // Calendar test = new Calendar("test",
-"test"); // test.addEvent(new Event("a","b",testDate,testDate)); //
-test.addEvent(new Event("b","c",testDate,testDate)); //
-session.setAttribute("consolidatedCalendar", test);
-<%-- %> --%>
-
-
 <c:if test="${not empty sessionScope.consolidatedCalendar}">
 	<div class="consolidatedEvents">
 		<ul>

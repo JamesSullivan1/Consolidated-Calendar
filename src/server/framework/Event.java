@@ -20,8 +20,6 @@ public class Event {
 	 *            The name descriptor for the Event
 	 * @param location
 	 *            The location of the Event
-	 * @param owner
-	 *            The Calendar that owns the Event
 	 * @param startDate
 	 *            The starting date of the Event
 	 * @param endDate
@@ -41,8 +39,6 @@ public class Event {
 	 *            The name descriptor for the Event
 	 * @param location
 	 *            The location of the Event
-	 * @param owner
-	 *            The Calendar that owns the Event
 	 * @param startDate
 	 *            The starting date of the Event
 	 */
@@ -111,13 +107,16 @@ public class Event {
 		boolean endDateEquals = false;
 		if (event.name.equalsIgnoreCase(this.name)) {
 			nameEquals = true;
-		} else if (event.startDate.equals(this.startDate)) {
+		} 
+		if (event.startDate.equals(this.startDate)) {
 			startDateEquals = true;
-		} else if (event.endDate != null && this.endDate != null) {
+		} 
+		if (event.endDate != null && this.endDate != null) {
 			if (event.endDate.equals(this.endDate)) {
 				endDateEquals = true;
 			}
-		} else {
+		} 
+		if (event.endDate == null && this.endDate == null){
 			endDateEquals = true;
 		}
 		return nameEquals && startDateEquals && endDateEquals;
