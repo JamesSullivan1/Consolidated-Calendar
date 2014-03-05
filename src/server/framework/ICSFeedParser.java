@@ -59,12 +59,12 @@ public final class ICSFeedParser {
 	}
 
 	/**
-	 * Parses a .ics file for Calendar Data, including the title and service ID.
+	 * Parses a .ics file for Calendar Data and returns a new Calendar object
+	 * accordingly.
 	 * 
 	 * @param f
 	 *            The file to be parsed.
-	 * @return A String[]; where String[0] = calendarName and String[1] =
-	 *         calendarServiceID.
+	 * @return A new Calendar corresponding to the parsed information.
 	 * @throws IOException
 	 */
 	public static Calendar getCalendarData(File f) throws IOException {
@@ -159,7 +159,8 @@ public final class ICSFeedParser {
 				// If input was valid, create a new corresponding event
 				else if (current.equals("END:VEVENT\r")) {
 					inEvent = false;
-					// Eliminate events with null input for the first three fields
+					// Eliminate events with null input for the first three
+					// fields
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 

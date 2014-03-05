@@ -9,7 +9,6 @@ public class Test {
 
 	public static void main(String[] args) {
 		File f = null;
-		String[] input = null;
 		Event[] events = null;
 		URL url = null;
 		try {
@@ -20,13 +19,11 @@ public class Test {
 		try {
 			f = ICSFeedParser.downloadICSFile(url);
 			System.out.println(f.getAbsolutePath());
-			input = ICSFeedParser.getCalendarData(f);
 			events = ICSFeedParser.getEvents(f);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("FILE NOT FOUND!!!!!!");
 		}
-		System.out.println(input[0] + " " + input[1]);
 		for (Event e : events) {
 			System.out.println(e.toString());
 		}
