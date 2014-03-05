@@ -1,11 +1,16 @@
 package server.web;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
+
 import com.google.api.client.auth.oauth2.Credential;
+
 import server.oauth.GoogleAuthHelper;
 
 
@@ -54,15 +59,23 @@ public class FeedSelectionHelper {
 	public static void editICSFeeds(HttpServletRequest request, HttpSession session)
 		{
 		//Get current feed list if it exists.
-		ArrayList<String> icsList = (ArrayList<String>)session.getAttribute("icsList");
+		ArrayList<URL> icsList = (ArrayList<URL>)session.getAttribute("icsList");
 		if (icsList == null)
-			icsList = new ArrayList<String>();
+			icsList = new ArrayList<URL>();
 		
 		String newFeed = request.getParameter("addICS");
 		if (newFeed != null)
 			if (!icsList.contains(newFeed))
-				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) //Some initial weak ics url validation.
-					icsList.add(newFeed);
+				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")){ //Some initial weak ics url validation.
+					URL link = null;
+					try {
+						link = new URL(newFeed);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					icsList.add(link);
+				}
 				else
 					session.setAttribute("badFeed", true);
 		

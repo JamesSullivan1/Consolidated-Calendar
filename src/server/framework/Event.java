@@ -20,19 +20,32 @@ public class Event {
 	 *            The name descriptor for the Event
 	 * @param location
 	 *            The location of the Event
-	 * @param owner
-	 *            The Calendar that owns the Event
 	 * @param startDate
 	 *            The starting date of the Event
 	 * @param endDate
 	 *            The ending date of the Event
 	 */
-	public Event(String name, String location, Date startDate, Date endDate, Calendar owner) {
+	public Event(String name, String location, Date startDate, Date endDate) {
 		this.name = name;
 		this.location = location;
-		this.owner = owner;
 		this.startDate = startDate;
 		this.endDate = endDate;
+	}
+	
+	/**
+	 * Constructor for an Event object with only one date specified.
+	 * 
+	 * @param name
+	 *            The name descriptor for the Event
+	 * @param location
+	 *            The location of the Event
+	 * @param startDate
+	 *            The starting date of the Event
+	 */
+	public Event(String name, String location, Date startDate) {
+		this.name = name;
+		this.location = location;
+		this.startDate = startDate;
 	}
 
 	/**
@@ -59,14 +72,14 @@ public class Event {
 	/**
 	 * @return The Start date of the Event
 	 */
-	public Date getStart() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
 	/**
 	 * @return The End date of the Event
 	 */
-	public Date getEnd() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
@@ -80,7 +93,39 @@ public class Event {
 		this.owner = owner;
 	}
 
+	/**
+	 * Returns true if the other event is identical (checks name, start and end
+	 * time).
+	 * 
+	 * @param Event
+	 *            event the event to compare.
+	 * @return True if the events are identical.
+	 */
+	public boolean equals(Event event) {
+		boolean nameEquals = false;
+		boolean startDateEquals = false;
+		boolean endDateEquals = false;
+		if (event.name.equalsIgnoreCase(this.name)) {
+			nameEquals = true;
+		} 
+		if (event.startDate.equals(this.startDate)) {
+			startDateEquals = true;
+		} 
+		if (event.endDate != null && this.endDate != null) {
+			if (event.endDate.equals(this.endDate)) {
+				endDateEquals = true;
+			}
+		} 
+		if (event.endDate == null && this.endDate == null){
+			endDateEquals = true;
+		}
+		return nameEquals && startDateEquals && endDateEquals;
+	}
+
 	public String toString() {
-		return name;
+		if (endDate == null) {
+			return name + ":    " + startDate.toString();
+		}
+		return name + ":    " + startDate.toString() + " to " + endDate.toString();
 	}
 }

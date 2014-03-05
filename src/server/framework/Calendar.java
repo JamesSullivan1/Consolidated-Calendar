@@ -28,6 +28,22 @@ public class Calendar {
 	}
 
 	/**
+	 * Constructor for a new Calendar object with no existing events.
+	 * 
+	 * @param events
+	 *            A (possibly empty) ArrayList containing Event objects
+	 * @param name
+	 *            A descriptor name for the Calendar
+	 * @param service
+	 *            A descriptor for the backing service of the Calendar
+	 */
+	public Calendar(String name, String service) {
+		this.events = new ArrayList<Event>();
+		this.name = name;
+		this.service = service;
+	}
+
+	/**
 	 * @return The service descriptor of the Calendar.
 	 */
 	public String getService() {
@@ -49,7 +65,7 @@ public class Calendar {
 	}
 
 	/**
-	 * Add event to the Calendar, ignoring a duplicate event.
+	 * Add event to the Calendar, ignoring a duplicate event. Sets the Event's owner to be This.
 	 * <p>
 	 * <ul>
 	 * <li>Precondition: An event object is provided as input
@@ -61,7 +77,12 @@ public class Calendar {
 	 *            The event to be added.
 	 */
 	public void addEvent(Event event) {
-		// Some code
+		// Redundancy checking
+		for (Event e : events) {
+			if (e.equals(event))
+				return;
+		}
+		events.add(event);
 		event.setOwner(this);
 	}
 
@@ -79,5 +100,28 @@ public class Calendar {
 	 *            The event to be removed.
 	 */
 	public void removeEvent(Event event) {
+		// Remove actual event and return
+		if (events.contains(event)) {
+			events.remove(event);
+			return;
+		}
+
+		// Remove duplicate events
+		for (Event e : events) {
+			if (e.equals(event)) {
+				events.remove(e);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Merges a second calendar into this Calendar, handling redundancy.
+	 * @param c The Calendar to be merged in
+	 */
+	public void merge(Calendar c) {
+		for (Event e : c.getEvents()) {
+			addEvent(e);
+		}
 	}
 }
