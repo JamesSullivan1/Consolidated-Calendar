@@ -33,6 +33,24 @@ public class Event {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
+	
+	/**
+	 * Constructor for an Event object with only one date specified.
+	 * 
+	 * @param name
+	 *            The name descriptor for the Event
+	 * @param location
+	 *            The location of the Event
+	 * @param owner
+	 *            The Calendar that owns the Event
+	 * @param startDate
+	 *            The starting date of the Event
+	 */
+	public Event(String name, String location, Date startDate) {
+		this.name = name;
+		this.location = location;
+		this.startDate = startDate;
+	}
 
 	/**
 	 * @return The name descriptor of the Event
@@ -95,13 +113,20 @@ public class Event {
 			nameEquals = true;
 		} else if (event.startDate.equals(this.startDate)) {
 			startDateEquals = true;
-		} else if (event.endDate.equals(this.endDate)) {
+		} else if (event.endDate != null && this.endDate != null) {
+			if (event.endDate.equals(this.endDate)) {
+				endDateEquals = true;
+			}
+		} else {
 			endDateEquals = true;
 		}
 		return nameEquals && startDateEquals && endDateEquals;
 	}
 
 	public String toString() {
+		if (endDate == null) {
+			return name + ":    " + startDate.toString();
+		}
 		return name + ":    " + startDate.toString() + " to " + endDate.toString();
 	}
 }
