@@ -67,7 +67,7 @@ public final class ICSFeedParser {
 	 *         calendarServiceID.
 	 * @throws IOException
 	 */
-	public static String[] getCalendarData(File f) throws IOException {
+	public static Calendar getCalendarData(File f) throws IOException {
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -94,7 +94,7 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return calendarData;
+		return new Calendar(calendarData[0], calendarData[1]);
 	}
 
 	/**

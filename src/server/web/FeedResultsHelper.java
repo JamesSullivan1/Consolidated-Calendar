@@ -52,18 +52,14 @@ public class FeedResultsHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String[] calendarInfo = null;
+			// Get new calendar from the ICS feed
+			Calendar newCal = null;
 			try {
-				calendarInfo = ICSFeedParser.getCalendarData(inputFile);
+				newCal = ICSFeedParser.getCalendarData(inputFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// Get Calendar data
-			String calServID = calendarInfo[0];
-			String calendarName = calendarInfo[1];
-			// Construct new calendar and add it to the session's calendarList
-			Calendar newCal = new Calendar(calendarName, calServID);
 			calendarList.add(newCal);
 			// Get event data
 			Event[] events = null;
