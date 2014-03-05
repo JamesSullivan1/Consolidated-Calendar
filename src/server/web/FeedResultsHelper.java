@@ -42,6 +42,8 @@ public class FeedResultsHelper {
 			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
 		}
 
+		// Iterate through the ICS list, creating a unique calendar for each ICS link.
+		// Finish by merging this calendar into 'consolidated'.
 		for (URL link : icsList) {
 			File inputFile = null;
 			try {
@@ -57,12 +59,13 @@ public class FeedResultsHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			// Get Calendar data
 			String calServID = calendarInfo[0];
 			String calendarName = calendarInfo[1];
-
+			// Construct new calendar and add it to the session's calendarList
 			Calendar newCal = new Calendar(calendarName, calServID);
 			calendarList.add(newCal);
-
+			// Get event data
 			Event[] events = null;
 			try {
 				events = ICSFeedParser.getEvents(inputFile);
@@ -70,13 +73,13 @@ public class FeedResultsHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			// Add all events to the newly created calendar
 			for (Event e : events) {
 				newCal.addEvent(e);
 			}
-
+			// Merge new calendar into 'consolidated'
 			consolidated.merge(newCal);
-			
+			// Cleanup
 			inputFile.delete();
 		}
 		

@@ -21,6 +21,17 @@ import java.util.Date;
 
 public final class ICSFeedParser {
 
+	private static final String DATE_FORMAT_STRING = "yyyyMMdd'T'HHmmss'Z'";
+
+	/**
+	 * Downloads a .ics file from a source URL and returns a local link to the
+	 * file.
+	 * 
+	 * @param link
+	 *            The URL pointing to a .ics file download.
+	 * @return A local file reference link to the .ics file.
+	 * @throws IOException
+	 */
 	public static File downloadICSFile(URL link) throws IOException {
 		Random r = new Random();
 		int rand = r.nextInt(65536);
@@ -47,6 +58,15 @@ public final class ICSFeedParser {
 		return f;
 	}
 
+	/**
+	 * Parses a .ics file for Calendar Data, including the title and service ID.
+	 * 
+	 * @param f
+	 *            The file to be parsed.
+	 * @return A String[]; where String[0] = calendarName and String[1] =
+	 *         calendarServiceID.
+	 * @throws IOException
+	 */
 	public static String[] getCalendarData(File f) throws IOException {
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
@@ -61,10 +81,13 @@ public final class ICSFeedParser {
 			current = parser.next();
 			splitter = current.split(":");
 
+			// Service ID field
 			if (splitter[0].equals("PRODID") && servid == null) {
 				servid = current.split(":")[1];
 				calendarData[0] = servid;
-			} else if (splitter[0].equals("X-WR-CALNAME") && calname == null) {
+			}
+			// Calendar Name field
+			else if (splitter[0].equals("X-WR-CALNAME") && calname == null) {
 				calname = current.split(":")[1];
 				calendarData[1] = calname;
 				flag = false;
@@ -74,9 +97,18 @@ public final class ICSFeedParser {
 		return calendarData;
 	}
 
+	/**
+	 * Parses a .ics file for Event Data, returning a list of events.
+	 * 
+	 * @param f
+	 *            The file to be parsed.
+	 * @return An Event[] representing the events in the .ics feed.
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public static Event[] getEvents(File f) throws FileNotFoundException,
 			IOException {
-		DateFormat df = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+		DateFormat df = new SimpleDateFormat(DATE_FORMAT_STRING);
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -100,28 +132,34 @@ public final class ICSFeedParser {
 				current = parser.next();
 				splitter = current.split(":");
 
+				// Event Name field
 				if (splitter[0].equals("SUMMARY")) {
 					eventData[0] = splitter[1];
-				} else if (splitter[0].equals("LOCATION")) {
+				}
+				// Event Location field
+				else if (splitter[0].equals("LOCATION")) {
 					eventData[1] = splitter[1];
-				} else if (splitter[0].equals("DTSTART")) {
+				}
+				// Event Start Date field
+				else if (splitter[0].equals("DTSTART")) {
 					try {
 						start = df.parse(splitter[1]);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-
-				} else if (splitter[0].equals("DTEND")) {
-
+				}
+				// Event End Date field (OPTIONAL)
+				else if (splitter[0].equals("DTEND")) {
 					try {
 						end = df.parse(splitter[1]);
 					} catch (ParseException e) {
-
 						e.printStackTrace();
 					}
-
-				} else if (current.equals("END:VEVENT\r")) {
+				}
+				// If input was valid, create a new corresponding event
+				else if (current.equals("END:VEVENT\r")) {
 					inEvent = false;
+					// Eliminate events with null input for the first three fields
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 

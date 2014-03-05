@@ -122,6 +122,10 @@ public class Event {
 		return nameEquals && startDateEquals && endDateEquals;
 	}
 
+	/**
+	 * Returns a string representation of this Event.
+	 * @return String representation. Format- "name: startDate [to endDate]"
+	 */
 	public String toString() {
 		if (endDate == null) {
 			return name + ":    " + startDate.toString();

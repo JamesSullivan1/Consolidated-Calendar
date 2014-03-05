@@ -116,7 +116,13 @@ public class Calendar {
 	}
 	
 	/**
-	 * Merges a second calendar into this Calendar, handling redundancy.
+	 * Merges a second calendar into this Calendar, handling redundancy as needed.
+	 * <p>
+	 * <ul>
+	 * <li>Precondition: A calendar object is given as input.
+	 * <li>Postcondition: Any events not already in this Calendar are added into it.
+	 * </ul>
+	 * 
 	 * @param c The Calendar to be merged in
 	 */
 	public void merge(Calendar c) {
