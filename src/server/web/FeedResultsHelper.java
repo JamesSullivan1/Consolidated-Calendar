@@ -4,21 +4,25 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import server.framework.*;
 
+/**
+ * Main class that provides all java functionality for feedResults.jsp.
+ * 
+ * @author James
+ */
 public class FeedResultsHelper {
 
 	/**
 	 * Parses the user's input .ics feeds, creating new session calendars for
 	 * each feed and populating these calendars with events.
 	 * 
-	 * @param request
-	 * @param session
+	 * @param request server request object
+	 * @param session server session object
 	 */
+	@SuppressWarnings("unchecked")
 	public static void parseFeeds(HttpServletRequest request,
 			HttpSession session) {
 		// Get current feed list if it exists.
