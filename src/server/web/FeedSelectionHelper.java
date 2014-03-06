@@ -4,23 +4,24 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
-
-import com.google.api.client.auth.oauth2.Credential;
-
 import server.oauth.GoogleAuthHelper;
 
 
+/**
+ * Main class that provides all java functionality for feedResults.jsp.
+ * 
+ * @author Daniel Wehr
+ */
 public class FeedSelectionHelper {
 	
 	/**
 	 * Displays google sign in link.
 	 * 
-	 * @param session
-	 * @param out
+	 * @param session server session object
+	 * @param out writer to print to the calling jsp page
 	 * @throws IOException
 	 */
 	public static void showGoogleAuthLink(HttpSession session, JspWriter out) throws IOException {
@@ -32,37 +33,19 @@ public class FeedSelectionHelper {
 	}
 	
 	/**
-	 * @param session
-	 * @param out
-	 * @throws IOException
+	 * Processes adds and removals to the saved ics strings.
+	 * 
+	 * @param request server request object
+	 * @param session server session object
 	 */
-//	public static void showCalendarChoice(HttpSession session, JspWriter out) throws IOException {
-//		final GoogleAuthHelper helper = new GoogleAuthHelper();
-//		final Credential credential = (Credential)session.getAttribute("authCredential");
-//			
-//		/*
-//		 * Once the user is authenticated, print out some basic user
-//		 * information in JSON format to verify that the authentication 
-//		 * worked.
-//		 */
-//		final String calendarList = helper.getCalendarListJson(credential);
-//		out.println("Successful login to Google. Below are your calendars in JSON format.");
-//		out.println("<pre>");
-//		out.println(calendarList);
-//		out.println("</pre>");
-//	}
-	
-	/**
-	 * @param request
-	 * @param session
-	 */
-	public static void editICSFeeds(HttpServletRequest request, HttpSession session)
-		{
+	public static void editICSFeeds(HttpServletRequest request, HttpSession session) {
 		//Get current feed list if it exists.
+		@SuppressWarnings("unchecked")
 		ArrayList<URL> icsList = (ArrayList<URL>)session.getAttribute("icsList");
 		if (icsList == null)
 			icsList = new ArrayList<URL>();
 		
+		//Pull add request if it exists, and only process if it is not already saved
 		String newFeed = request.getParameter("addICS");
 		if (newFeed != null)
 			if (!icsList.contains(newFeed))
@@ -79,10 +62,11 @@ public class FeedSelectionHelper {
 				else
 					session.setAttribute("badFeed", true);
 		
+		//Pull remove request and remove feed.
 		String removeFeed = (String)request.getParameter("removeICS");
 		if (removeFeed != null)
 			icsList.remove(removeFeed);
 		
 		session.setAttribute("icsList", icsList);
-		}
+	}
 }
