@@ -120,6 +120,7 @@ public final class ICSFeedParser {
 			current = parser.next();
 			boolean inEvent = false;
 
+			//Events starts here
 			if (current.equals("BEGIN:VEVENT\r")) {
 				inEvent = true;
 			}
@@ -163,6 +164,7 @@ public final class ICSFeedParser {
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 
+					//Store valid parsed event data in a new Event
 					if (validEventParsed) {
 						Event e = null;
 						if (eventData[3] == null) {

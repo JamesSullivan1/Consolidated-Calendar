@@ -23,6 +23,7 @@ import server.framework.*;
  * Processes calls to and from the Google Calendar API
  */
 public class GCalAPIManager {
+<<<<<<< HEAD
 
 	// Utility
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -67,6 +68,31 @@ public class GCalAPIManager {
 		// retrieve primary calendar
 		com.google.api.services.calendar.model.Calendar primeCal = client
 				.calendars().get("primary").execute();
+=======
+	
+	/**
+	 * Asks for client and retrieves/parses GCal to our Calendar format
+	 * @param client 
+	 * 			Google Calendar client
+	 * @return c
+	 * 		Local calendar object with events from primary Google client calendar
+	 */
+	public static Calendar fetchGCal(com.google.api.services.calendar.Calendar client) throws IOException{
+		
+		//find primary calendar
+		com.google.api.services.calendar.model.CalendarList test = client.calendarList().list().setPageToken(null).execute();
+		List<CalendarListEntry> items = test.getItems();
+		CalendarListEntry primeListEntry = null;
+		for (CalendarListEntry calEntry : items){
+			if (calEntry.isPrimary()){
+				primeListEntry = calEntry;
+			}
+		}
+		
+		//retrieve primary calendar
+		String primeId = primeListEntry.getId();
+		com.google.api.services.calendar.model.Calendar primeCal = client.calendars().get(primeId).execute();
+>>>>>>> 6e469905da2925993953668ec32e9047aa8f1d12
 		String calname = primeCal.getSummary();
 		String servId = primeCal.getId();
 
