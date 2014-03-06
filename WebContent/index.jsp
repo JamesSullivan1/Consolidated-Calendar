@@ -7,7 +7,7 @@
 <%! static String pageTarget; %>
 
 <%
-IndexHelper.processGoogleAuth(request, session, out);
+IndexHelper.processGoogleAuth(request, session);
 IndexHelper.processPageTarget(request, session);
 IndexHelper.processLogOut(request, session);
 %>

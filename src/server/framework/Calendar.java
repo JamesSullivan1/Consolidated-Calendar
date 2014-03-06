@@ -131,21 +131,17 @@ public class Calendar {
 		}
 	}
 	
-	//Compares two Calendar objects and returns an ArrayList of Events that differ between them
-	public ArrayList<Event> eventDiff(Calendar other){
-		//new list of events
-		ArrayList<Event> e = new ArrayList<Event>();
+	/**
+	 * Removes all events from this common to the input Calendar
+	 * @param other Calendar to check
+	 */
+	public void eventDiff(Calendar other){
 		
 		//other's events
-		ArrayList<Event> otherEvents= new ArrayList<Event>();
+		ArrayList<Event> otherEvents= other.getEvents();
 		
-		for(Event eO : otherEvents){
-			for(Event eThis : this.events){
-				if(!eThis.equals(eO)){
-					e.add(eO);
-				}
-			}
+		for(Event e : otherEvents){
+			removeEvent(e);
 		}
-		return e;
 	}
 }
