@@ -129,6 +129,8 @@ public class Calendar {
 		for (Event e : c.getEvents()) {
 			addEvent(e);
 		}
+<<<<<<< HEAD
+=======
 	}
 	
 	//Compares two Calendar objects and returns an ArrayList of Events that differ between them
@@ -147,5 +149,6 @@ public class Calendar {
 			}
 		}
 		return e;
+>>>>>>> framework
 	}
 }
