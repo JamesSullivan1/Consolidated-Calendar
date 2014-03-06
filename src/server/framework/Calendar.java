@@ -131,13 +131,22 @@ public class Calendar {
 		}
 	}
 	
-	//Compares two Calendar objects and returns an ArrayList of Events that differ between them
+	/**
+	 * Call this method on the primary calendar only! Returns the events from the other calendar
+	 * 
+	 * @param other
+	 * 			The local input calendar to be compared to this primary calendar
+	 * 
+	 * @return e
+	 * 			An ArrayList of unique events from the other calendar
+	 * 
+	 */
 	public ArrayList<Event> eventDiff(Calendar other){
 		//new list of events
 		ArrayList<Event> e = new ArrayList<Event>();
 		
 		//other's events
-		ArrayList<Event> otherEvents= new ArrayList<Event>();
+		ArrayList<Event> otherEvents = other.getEvents();
 		
 		for(Event eO : otherEvents){
 			for(Event eThis : this.events){

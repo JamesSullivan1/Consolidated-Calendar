@@ -12,9 +12,18 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 import server.framework.*;
 
+/**
+ * Processes calls to and from the Google Calendar API
+ */
 public class GCalAPIManager {
 	
-	//Asks for client and retrieves/parses GCal to our Calendar format
+	/**
+	 * Asks for client and retrieves/parses GCal to our Calendar format
+	 * @param client 
+	 * 			Google Calendar client
+	 * @return c
+	 * 		Local calendar object with events from primary Google client calendar
+	 */
 	public static Calendar fetchGCal(com.google.api.services.calendar.Calendar client) throws IOException{
 		
 		//find primary calendar
