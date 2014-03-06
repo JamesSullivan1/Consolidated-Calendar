@@ -80,15 +80,25 @@ public class GCalAPIManager {
 
 		// Convert events
 		for (Event event : eventList) {
-			Date startDate = new Date(event.getStart().getDateTime().getValue());
-			Date endDate = new Date(event.getEnd().getDateTime().getValue());
-			String summary = event.getSummary();
-			String location = event.getLocation();
+			if (!event.getStatus().equals("cancelled")) {
 
-			server.framework.Event temp = new server.framework.Event(summary,
-					location, startDate, endDate);
-			e.add(temp);
+				Date startDate = null;
+				Date endDate = null;
+				if (isAllDayEvent(event)) {
+					startDate = new Date(event.getStart().getDate().getValue());
+					endDate = new Date(event.getEnd().getDate().getValue());
+				} else {
+					startDate = new Date(event.getStart().getDateTime()
+							.getValue());
+					endDate = new Date(event.getEnd().getDateTime().getValue());
+				}
+				String summary = event.getSummary();
+				String location = event.getLocation();
 
+				server.framework.Event temp = new server.framework.Event(
+						summary, location, startDate, endDate);
+				e.add(temp);
+			}
 		}
 
 		// Construct calendar from google data
@@ -153,6 +163,10 @@ public class GCalAPIManager {
 			newEvents.add(temp);
 		}
 		return newEvents;
+	}
+
+	private static boolean isAllDayEvent(Event e) {
+		return e.getEnd().getDateTime() == null;
 	}
 
 }
