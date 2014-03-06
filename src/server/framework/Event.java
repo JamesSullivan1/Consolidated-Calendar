@@ -116,7 +116,7 @@ public class Event {
 				endDateEquals = true;
 			}
 		} 
-		if (event.endDate == null && this.endDate == null){
+		if (event.endDate == null || this.endDate == null){
 			endDateEquals = true;
 		}
 		return nameEquals && startDateEquals && endDateEquals;

@@ -44,7 +44,7 @@
 
 	<br />
 	<form method="post">
-		<input type="hidden" name="pageTarget" value="feedResults.jsp">
+		<input type="hidden" name="pageTarget" value="mergeResults.jsp">
 		<c:choose>
 			<c:when test="${not empty sessionScope.icsList}">
 				<input type="submit" value="Process Feeds">
