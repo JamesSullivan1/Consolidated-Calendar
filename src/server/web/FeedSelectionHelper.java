@@ -53,14 +53,11 @@ public class FeedSelectionHelper {
 			icsList = new ArrayList<URL>();
 
 		// Pull add request if it exists, and only process if it is not already
-		// saved
+		// saved. Do a basic url check.
 		String newFeed = request.getParameter("addICS");
 		if (newFeed != null) {
 			if (!icsList.contains(newFeed)) {
-				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) { // Some
-																				// initial
-																				// URL
-																				// validation
+				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) {
 					URL link = null;
 					try {
 						link = new URL(newFeed);
@@ -75,9 +72,15 @@ public class FeedSelectionHelper {
 		}
 
 		// Pull remove request and remove feed.
-		String removeFeed = (String) request.getParameter("removeICS");
-		if (removeFeed != null)
-			icsList.remove(removeFeed);
+		try {
+			String removeFeedString = (String)request.getParameter("removeICS");
+			if (removeFeedString != null)
+				icsList.remove(new URL(removeFeedString));
+		}
+		catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		session.setAttribute("icsList", icsList);
 	}
