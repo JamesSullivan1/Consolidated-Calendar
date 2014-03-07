@@ -6,12 +6,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
 
+<%
+	MergeResultsHelper.parseFeeds(request, session);
+	MergeResultsHelper.pullGoogleEvents(request, session);
+%>
+
 <form method="post">
 	<input type="hidden" name="pageTarget" value="feedSelection.jsp">
 	<input type="submit" value="Return to Feed Selection">
 </form>
 	
-</form>
 
 <form method="post">
 	<input type="hidden" name="pageTarget" value="pushEvents.jsp">
@@ -26,7 +30,5 @@
 </form>
 
 <%
-	MergeResultsHelper.parseFeeds(request, session);
-	MergeResultsHelper.pullGoogleEvents(request, session);
 	MergeResultsHelper.showResults(request, session, out);
 %>
