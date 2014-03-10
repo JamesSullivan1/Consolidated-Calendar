@@ -51,9 +51,10 @@ public class MergeResultsHelper {
 		if (consolidated == null) {
 			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
 		}
-		
+
 		// Get session eventsToAdd if it exist
-		ArrayList<Event> eventsToAdd = (ArrayList<Event>) session.getAttribute("eventsToAdd");
+		ArrayList<Event> eventsToAdd = (ArrayList<Event>) session
+				.getAttribute("eventsToAdd");
 		if (eventsToAdd == null) {
 			eventsToAdd = consolidated.getEvents();
 		}
@@ -134,7 +135,9 @@ public class MergeResultsHelper {
 
 		session.setAttribute("googleClient", client);
 
-		consolidated.eventDiff(primaryGCal);
+		if (primaryGCal != null) {
+			consolidated.eventDiff(primaryGCal);
+		}
 
 	}
 
@@ -147,7 +150,7 @@ public class MergeResultsHelper {
 		if (consolidated == null) {
 			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
 		}
-		
+
 		if (consolidated.getEvents().isEmpty()) {
 			try {
 				out.println("No events found that are not already in your Calendar.");
@@ -157,7 +160,8 @@ public class MergeResultsHelper {
 			}
 		} else {
 			try {
-				out.println("<h2>Found " + consolidated.getEvents().size() + " new events.</h2>");
+				out.println("<h2>Found " + consolidated.getEvents().size()
+						+ " new events.</h2>");
 				for (Event e : consolidated.getEvents()) {
 					if (e != null) {
 						out.println("<li>" + e.toString() + "</li>");

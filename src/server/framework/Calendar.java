@@ -138,6 +138,9 @@ public class Calendar {
 	public void eventDiff(Calendar other){
 		
 		//other's events
+		if (other.getEvents() == null) {
+			return;
+		}
 		ArrayList<Event> otherEvents= other.getEvents();
 		
 		for(Event e : otherEvents){
