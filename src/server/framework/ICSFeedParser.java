@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.sun.org.apache.bcel.internal.util.ByteSequence;
+
 public final class ICSFeedParser {
 
 	private static final String DATE_FORMAT_STRING = "yyyyMMdd'T'HHmmss'Z'";
@@ -38,17 +40,28 @@ public final class ICSFeedParser {
 		URLConnection con;
 		DataInputStream dis;
 		FileOutputStream fos;
-		byte[] fileData;
+		ArrayList<Byte> fileData;
 		try {
 			con = link.openConnection();
 			dis = new DataInputStream(con.getInputStream());
-			fileData = new byte[con.getContentLength()];
-			for (int x = 0; x < fileData.length; x++) {
-				fileData[x] = dis.readByte();
+			if (con.getContentLength() < 0) {
+				fileData = new ArrayList<Byte>(65536);
+			} else {
+				fileData = new ArrayList<Byte>(con.getContentLength());
+			}
+			int nextVal;
+			while ((nextVal = dis.read()) > -1) {
+				fileData.add((byte)nextVal);
 			}
 			dis.close();
+			byte[] byteArray = new byte[fileData.size()];
+			for (int i = 0; i < fileData.size(); i++) {
+				byte b = fileData.get(i).byteValue();
+				byteArray[i] = b;
+			}
+			
 			fos = new FileOutputStream(f);
-			fos.write(fileData);
+			fos.write(byteArray);
 			fos.close();
 		} catch (IOException io) {
 			System.out.println(io);
