@@ -36,7 +36,7 @@ public final class ICSFeedParser {
 	public static File downloadICSFile(URL link) throws IOException {
 		Random r = new Random();
 		int rand = r.nextInt(65536);
-		File f = new File(rand + ".ics");
+		File f = new File("cc" + rand + ".ics");
 		URLConnection con;
 		DataInputStream dis;
 		FileOutputStream fos;
@@ -51,7 +51,7 @@ public final class ICSFeedParser {
 			}
 			int nextVal;
 			while ((nextVal = dis.read()) > -1) {
-				fileData.add((byte)nextVal);
+				fileData.add((byte) nextVal);
 			}
 			dis.close();
 			byte[] byteArray = new byte[fileData.size()];
@@ -59,7 +59,7 @@ public final class ICSFeedParser {
 				byte b = fileData.get(i).byteValue();
 				byteArray[i] = b;
 			}
-			
+
 			fos = new FileOutputStream(f);
 			fos.write(byteArray);
 			fos.close();
@@ -80,6 +80,7 @@ public final class ICSFeedParser {
 	 * @throws IOException
 	 */
 	public static Calendar getCalendarData(File f) throws IOException {
+		
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -133,7 +134,7 @@ public final class ICSFeedParser {
 			current = parser.next();
 			boolean inEvent = false;
 
-			//Events starts here
+			// Events starts here
 			if (current.equals("BEGIN:VEVENT\r")) {
 				inEvent = true;
 			}
@@ -177,15 +178,11 @@ public final class ICSFeedParser {
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 
-					//Store valid parsed event data in a new Event
+					// Store valid parsed event data in a new Event
 					if (validEventParsed) {
-						Event e = null;
-						if (eventData[3] == null) {
-							e = new Event(eventData[0], eventData[1], start);
-						} else {
-							e = new Event(eventData[0], eventData[1], start,
-									end);
-						}
+						Event e = new Event.EventBuilder(eventData[0], start)
+								.withEnd(end).withLocation(eventData[1])
+								.build();
 						eventList.add(e);
 					}
 

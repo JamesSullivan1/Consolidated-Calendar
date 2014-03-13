@@ -70,31 +70,33 @@ public class MergeResultsHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// Get new calendar from the ICS feed
-			Calendar newCal = null;
-			try {
-				newCal = ICSFeedParser.getCalendarData(inputFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (inputFile.exists()) {
+				// Get new calendar from the ICS feed
+				Calendar newCal = null;
+				try {
+					newCal = ICSFeedParser.getCalendarData(inputFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				calendarList.add(newCal);
+				// Get event data
+				Event[] events = null;
+				try {
+					events = ICSFeedParser.getEvents(inputFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// Add all events to the newly created calendar
+				for (Event e : events) {
+					newCal.addEvent(e);
+				}
+				// Merge new calendar into 'consolidated'
+				consolidated.merge(newCal);
+				// Cleanup
+				inputFile.delete();
 			}
-			calendarList.add(newCal);
-			// Get event data
-			Event[] events = null;
-			try {
-				events = ICSFeedParser.getEvents(inputFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// Add all events to the newly created calendar
-			for (Event e : events) {
-				newCal.addEvent(e);
-			}
-			// Merge new calendar into 'consolidated'
-			consolidated.merge(newCal);
-			// Cleanup
-			inputFile.delete();
 		}
 
 		session.setAttribute("calendarList", calendarList);

@@ -95,8 +95,9 @@ public class GCalAPIManager {
 				String summary = event.getSummary();
 				String location = event.getLocation();
 
-				server.framework.Event temp = new server.framework.Event(
-						summary, location, startDate, endDate);
+				server.framework.Event temp = new server.framework.Event.EventBuilder(
+						summary, startDate).withEnd(endDate)
+						.withLocation(location).build();
 				e.add(temp);
 			}
 		}
@@ -149,7 +150,7 @@ public class GCalAPIManager {
 			temp.setStart(new EventDateTime().setDateTime(new DateTime(event
 					.getStartDate())));
 			// Date offset defaults to 1h after start.
-			if (event.getEndDate() == null) {
+			if (!event.hasEndDate()) {
 				Date start = event.getStartDate();
 				Date end = (Date) start.clone();
 				end.setHours(end.getHours() + 1);
