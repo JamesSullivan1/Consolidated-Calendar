@@ -31,7 +31,7 @@ public final class ICSFeedParser {
 	 * @param link
 	 *            The URL pointing to a .ics file download.
 	 * @return A local file reference link to the .ics file.
-	 * @throws IOException
+	 * @throws IOException If the file could not be accessed.
 	 */
 	public static File downloadICSFile(URL link) throws IOException {
 		Random r = new Random();
@@ -64,7 +64,7 @@ public final class ICSFeedParser {
 			fos.write(byteArray);
 			fos.close();
 		} catch (IOException io) {
-			System.out.println(io);
+			throw io;
 		}
 
 		return f;
@@ -80,7 +80,7 @@ public final class ICSFeedParser {
 	 * @throws IOException
 	 */
 	public static Calendar getCalendarData(File f) throws IOException {
-		
+
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;

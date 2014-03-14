@@ -64,13 +64,13 @@ public class MergeResultsHelper {
 		// Finish by merging this calendar into 'consolidated'.
 		for (URL link : icsList) {
 			File inputFile = null;
+			boolean fileDownloaded = true;
 			try {
 				inputFile = ICSFeedParser.downloadICSFile(link);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				fileDownloaded = false;
 			}
-			if (inputFile.exists()) {
+			if (fileDownloaded) {
 				// Get new calendar from the ICS feed
 				Calendar newCal = null;
 				try {
