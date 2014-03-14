@@ -64,37 +64,39 @@ public class MergeResultsHelper {
 		// Finish by merging this calendar into 'consolidated'.
 		for (URL link : icsList) {
 			File inputFile = null;
+			boolean fileDownloaded = true;
 			try {
 				inputFile = ICSFeedParser.downloadICSFile(link);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				fileDownloaded = false;
 			}
-			// Get new calendar from the ICS feed
-			Calendar newCal = null;
-			try {
-				newCal = ICSFeedParser.getCalendarData(inputFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (fileDownloaded) {
+				// Get new calendar from the ICS feed
+				Calendar newCal = null;
+				try {
+					newCal = ICSFeedParser.getCalendarData(inputFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				calendarList.add(newCal);
+				// Get event data
+				Event[] events = null;
+				try {
+					events = ICSFeedParser.getEvents(inputFile);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// Add all events to the newly created calendar
+				for (Event e : events) {
+					newCal.addEvent(e);
+				}
+				// Merge new calendar into 'consolidated'
+				consolidated.merge(newCal);
+				// Cleanup
+				inputFile.delete();
 			}
-			calendarList.add(newCal);
-			// Get event data
-			Event[] events = null;
-			try {
-				events = ICSFeedParser.getEvents(inputFile);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// Add all events to the newly created calendar
-			for (Event e : events) {
-				newCal.addEvent(e);
-			}
-			// Merge new calendar into 'consolidated'
-			consolidated.merge(newCal);
-			// Cleanup
-			inputFile.delete();
 		}
 
 		session.setAttribute("calendarList", calendarList);

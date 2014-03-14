@@ -83,7 +83,6 @@ public class Calendar {
 				return;
 		}
 		events.add(event);
-		event.setOwner(this);
 	}
 
 	/**
