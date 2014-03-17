@@ -1,8 +1,11 @@
 package server.web;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import server.framework.Calendar;
 import server.oauth.GoogleAuthHelper;
 import com.google.api.client.auth.oauth2.Credential;
 
@@ -36,7 +39,13 @@ public class IndexHelper {
 			
 			//Store token in session.
 			session.setAttribute("authCredential", credential);
+		} else {
+			return;
 		}
+		
+		//Start thread to process calendar info from google
+		AuthThread authThread = new AuthThread(session);
+		authThread.start();
 	}
 	
 	/**
@@ -70,5 +79,20 @@ public class IndexHelper {
 	public static void processLogOut(HttpServletRequest request, HttpSession session) {
 		if (request.getParameter("logOut") != null)
 			session.removeAttribute("authCredential");
+	}
+	
+	/**
+	 * Initialize session required session vars that will be used throughout the program.
+	 * @param session server session object
+	 */
+	public static void init(HttpSession session) {
+		Boolean initDone = (Boolean)session.getAttribute("initDone");
+		if (initDone == null || !initDone ) {
+			session.setAttribute("icsList", new ArrayList<URL>());
+			session.setAttribute("consolidatedCalendar", new Calendar("Consolidated", "Consolidated-Cal"));
+			session.setAttribute("threadCount", 0);
+			session.setAttribute("parseErrors", new ArrayList<String>());
+			session.setAttribute("initDone", new Boolean(true));
+		}
 	}
 }
