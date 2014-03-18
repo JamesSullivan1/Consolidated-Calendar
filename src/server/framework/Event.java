@@ -105,7 +105,7 @@ public class Event {
 	}
 
 	/**
-	 * Static Event Builder class to abstractify the creation of Events.
+	 * Static Event Builder class to enforce the parameters for the creation of Events.
 	 * 
 	 * @author james
 	 * 

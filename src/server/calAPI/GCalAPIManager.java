@@ -103,7 +103,7 @@ public class GCalAPIManager {
 		}
 
 		// Construct calendar from google data
-		Calendar c = new Calendar(e, calname, servId);
+		Calendar c = new Calendar.CalendarBuilder(calname, e).withService(servId).build();
 		return c;
 	}
 

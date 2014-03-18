@@ -1,6 +1,9 @@
 package server.framework;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import server.framework.Event.EventBuilder;
 
 /**
  * Calendar - An internal representation of a Calendar.
@@ -21,10 +24,10 @@ public class Calendar {
 	 * @param service
 	 *            A descriptor for the backing service of the Calendar
 	 */
-	public Calendar(ArrayList<Event> events, String name, String service) {
-		this.events = events;
-		this.name = name;
-		this.service = service;
+	public Calendar(CalendarBuilder cb) {
+		this.events = cb.events;
+		this.name = cb.name;
+		this.service = cb.service;
 	}
 
 	/**
@@ -144,6 +147,49 @@ public class Calendar {
 		
 		for(Event e : otherEvents){
 			removeEvent(e);
+		}
+	}
+	
+	
+	/**
+	 * Static Calendar Builder class to enforce the parameters for the creation of Calendars
+	 * 
+	 * @author james
+	 * 
+	 */
+	public static class CalendarBuilder {
+
+		String name; // Required
+		ArrayList<Event> events; // Required
+		String service;
+
+		/**
+		 * Constructor for the CalendarBuilder providing required parameters.
+		 * 
+		 * @param name
+		 *            Calendar name
+		 * @param events
+		 *            ArrayList (possibly empty) of calendar events
+		 */
+		public CalendarBuilder(String name, ArrayList<Event> events) {
+			this.name = name;
+			this.events = events;
+			this.service = null;
+		}
+
+		/**
+		 * @param service
+		 *            Optional service name
+		 */
+		public CalendarBuilder withService(String service) {
+			this.service = service;
+			return this;
+		}
+		/**
+		 * @return A new Calendar object built by this.
+		 */
+		public Calendar build() {
+			return new Calendar(this);
 		}
 	}
 }
