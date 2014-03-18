@@ -7,8 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,8 +15,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.sun.org.apache.bcel.internal.util.ByteSequence;
 
 public final class ICSFeedParser {
 
@@ -31,12 +27,12 @@ public final class ICSFeedParser {
 	 * @param link
 	 *            The URL pointing to a .ics file download.
 	 * @return A local file reference link to the .ics file.
-	 * @throws IOException If the file could not be accessed.
+	 * @throws IOException
 	 */
 	public static File downloadICSFile(URL link) throws IOException {
 		Random r = new Random();
 		int rand = r.nextInt(65536);
-		File f = new File("cc" + rand + ".ics");
+		File f = new File(rand + ".ics");
 		URLConnection con;
 		DataInputStream dis;
 		FileOutputStream fos;
@@ -51,7 +47,7 @@ public final class ICSFeedParser {
 			}
 			int nextVal;
 			while ((nextVal = dis.read()) > -1) {
-				fileData.add((byte) nextVal);
+				fileData.add((byte)nextVal);
 			}
 			dis.close();
 			byte[] byteArray = new byte[fileData.size()];
@@ -59,12 +55,12 @@ public final class ICSFeedParser {
 				byte b = fileData.get(i).byteValue();
 				byteArray[i] = b;
 			}
-
+			
 			fos = new FileOutputStream(f);
 			fos.write(byteArray);
 			fos.close();
 		} catch (IOException io) {
-			throw io;
+			System.out.println(io);
 		}
 
 		return f;
@@ -80,7 +76,6 @@ public final class ICSFeedParser {
 	 * @throws IOException
 	 */
 	public static Calendar getCalendarData(File f) throws IOException {
-
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -107,7 +102,7 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return new Calendar.CalendarBuilder(calendarData[0], null).withService(calendarData[1]).build();
+		return new Calendar(calendarData[0], calendarData[1]);
 	}
 
 	/**
@@ -134,7 +129,7 @@ public final class ICSFeedParser {
 			current = parser.next();
 			boolean inEvent = false;
 
-			// Events starts here
+			//Events starts here
 			if (current.equals("BEGIN:VEVENT\r")) {
 				inEvent = true;
 			}
@@ -178,11 +173,15 @@ public final class ICSFeedParser {
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 
-					// Store valid parsed event data in a new Event
+					//Store valid parsed event data in a new Event
 					if (validEventParsed) {
-						Event e = new Event.EventBuilder(eventData[0], start)
-								.withEnd(end).withLocation(eventData[1])
-								.build();
+						Event e = null;
+						if (eventData[3] == null) {
+							e = new Event(eventData[0], eventData[1], start);
+						} else {
+							e = new Event(eventData[0], eventData[1], start,
+									end);
+						}
 						eventList.add(e);
 					}
 
