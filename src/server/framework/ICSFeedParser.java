@@ -107,7 +107,7 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return new Calendar(calendarData[0], calendarData[1]);
+		return new Calendar.CalendarBuilder(calendarData[0], null).withService(calendarData[1]).build();
 	}
 
 	/**

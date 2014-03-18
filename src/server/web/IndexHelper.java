@@ -89,7 +89,7 @@ public class IndexHelper {
 		Boolean initDone = (Boolean)session.getAttribute("initDone");
 		if (initDone == null || !initDone ) {
 			session.setAttribute("icsList", new ArrayList<URL>());
-			session.setAttribute("consolidatedCalendar", new Calendar("Consolidated", "Consolidated-Cal"));
+			session.setAttribute("consolidatedCalendar", new Calendar.CalendarBuilder("Consolidated",null).withService("Consolidated-Cal").build());
 			session.setAttribute("threadCount", 0);
 			session.setAttribute("parseErrors", new ArrayList<String>());
 			session.setAttribute("initDone", new Boolean(true));

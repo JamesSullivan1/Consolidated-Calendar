@@ -8,10 +8,10 @@ import java.util.Date;
  */
 public class Event {
 	private String name; // Required
-	private String location; // Optional
-	private Calendar owner; // Optional
+	private String location;
+	private Calendar owner;
 	private Date startDate; // Required
-	private Date endDate; // Optional
+	private Date endDate;
 	private boolean hasEndDate; // Required
 
 	/*

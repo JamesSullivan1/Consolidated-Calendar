@@ -16,7 +16,7 @@ public class PushEventsHelper {
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated",null).withService( "Consolidated-Cal").build();
 		}
 		
 		

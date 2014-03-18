@@ -31,22 +31,6 @@ public class Calendar {
 	}
 
 	/**
-	 * Constructor for a new Calendar object with no existing events.
-	 * 
-	 * @param events
-	 *            A (possibly empty) ArrayList containing Event objects
-	 * @param name
-	 *            A descriptor name for the Calendar
-	 * @param service
-	 *            A descriptor for the backing service of the Calendar
-	 */
-	public Calendar(String name, String service) {
-		this.events = new ArrayList<Event>();
-		this.name = name;
-		this.service = service;
-	}
-
-	/**
 	 * @return The service descriptor of the Calendar.
 	 */
 	public String getService() {
@@ -173,7 +157,11 @@ public class Calendar {
 		 */
 		public CalendarBuilder(String name, ArrayList<Event> events) {
 			this.name = name;
-			this.events = events;
+			if (events == null) {
+				this.events = new ArrayList<Event>();
+			} else {
+				this.events = events;
+			}
 			this.service = null;
 		}
 

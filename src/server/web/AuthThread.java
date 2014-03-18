@@ -36,7 +36,7 @@ public class AuthThread extends Thread {
 		Calendar consolidated = (Calendar)session.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
 			synchronized(session) {
-				consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+				consolidated = new Calendar.CalendarBuilder("Consolidated",null).withService("Consolidated-Cal").build();
 				session.setAttribute("consolidatedCalendar", consolidated);
 			}
 		}

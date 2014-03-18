@@ -59,7 +59,7 @@ public class FeedSelectionHelper {
 				URL newURL = new URL(newFeed);
 				if (!icsList.contains(newURL)) {
 					if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) {
-						//New ICS feed is good. Create parsing thread.
+						// New ICS feed is good. Create parsing thread.
 						icsList.add(newURL);
 						AddICSThread addICS = new AddICSThread(session, newURL);
 						addICS.start();
@@ -73,33 +73,37 @@ public class FeedSelectionHelper {
 
 		// Pull remove request and remove feed.
 		try {
-			String removeFeedString = (String)request.getParameter("removeICS");
+			String removeFeedString = (String) request
+					.getParameter("removeICS");
 			if (removeFeedString != null) {
 				URL toRemove = new URL(removeFeedString);
-				
-				//Remove url from ics list.
+
+				// Remove url from ics list.
 				icsList.remove(toRemove);
-				
-				//Get stored ics calendar.
-				Calendar oldCal = (Calendar)session.getAttribute(toRemove.toString());
+
+				// Get stored ics calendar.
+				Calendar oldCal = (Calendar) session.getAttribute(toRemove
+						.toString());
 				if (oldCal != null) {
-					//Remove stored ics calendar from session.
+					// Remove stored ics calendar from session.
 					session.removeAttribute(toRemove.toString());
-					
+
 					// Get Consolidated session calendar
-					Calendar consolidated = (Calendar)session.getAttribute("consolidatedCalendar");
-					
+					Calendar consolidated = (Calendar) session
+							.getAttribute("consolidatedCalendar");
+
 					synchronized (consolidated) {
-						//Remove events in old calendar from consolidated calendar
+						// Remove events in old calendar from consolidated
+						// calendar
 						consolidated.eventDiff(oldCal);
-						
-						//Set new events flag.
-						session.setAttribute("eventsToAdd", !consolidated.getEvents().isEmpty());
+
+						// Set new events flag.
+						session.setAttribute("eventsToAdd", !consolidated
+								.getEvents().isEmpty());
 					}
 				}
 			}
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			// TODO Remove feed string was bad. This should not happen!
 			// It would not have been stored in the first place.
 			e.printStackTrace();
