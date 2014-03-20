@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import server.exception.ICSParseException;
+
 public final class ICSFeedParser {
 
 	private static final String DATE_FORMAT_STRING = "yyyyMMdd'T'HHmmss'Z'";
@@ -29,7 +31,7 @@ public final class ICSFeedParser {
 	 * @return A local file reference link to the .ics file.
 	 * @throws IOException
 	 */
-	public static File downloadICSFile(URL link) throws IOException {
+	public static File downloadICSFile(URL link) throws ICSParseException {
 		Random r = new Random();
 		int rand = r.nextInt(65536);
 		File f = new File(rand + ".ics");
@@ -37,32 +39,35 @@ public final class ICSFeedParser {
 		DataInputStream dis;
 		FileOutputStream fos;
 		ArrayList<Byte> fileData;
-		con = link.openConnection();
-		dis = new DataInputStream(con.getInputStream());
-		if (con.getContentLength() < 0) {
-			fileData = new ArrayList<Byte>(65536);
-		} else {
-			fileData = new ArrayList<Byte>(con.getContentLength());
-		}
-		int nextVal;
-		while ((nextVal = dis.read()) > -1) {
-			fileData.add((byte) nextVal);
-		}
-		dis.close();
-		byte[] byteArray = new byte[fileData.size()];
-		for (int i = 0; i < fileData.size(); i++) {
-			byte b = fileData.get(i).byteValue();
-			byteArray[i] = b;
-		}
+		try {
+			con = link.openConnection();
+			dis = new DataInputStream(con.getInputStream());
+			if (con.getContentLength() < 0) {
+				fileData = new ArrayList<Byte>(65536);
+			} else {
+				fileData = new ArrayList<Byte>(con.getContentLength());
+			}
+			int nextVal;
+			while ((nextVal = dis.read()) > -1) {
+				fileData.add((byte) nextVal);
+			}
+			dis.close();
+			byte[] byteArray = new byte[fileData.size()];
+			for (int i = 0; i < fileData.size(); i++) {
+				byte b = fileData.get(i).byteValue();
+				byteArray[i] = b;
+			}
 
-		fos = new FileOutputStream(f);
-		fos.write(byteArray);
-		fos.close();
+			fos = new FileOutputStream(f);
+			fos.write(byteArray);
+			fos.close();
 
-		if (!f.exists()) {
-			throw new IOException();
+			if (!f.exists()) {
+				throw new IOException();
+			}
+		} catch (IOException e) {
+			throw new ICSParseException(e.getMessage());
 		}
-
 		return f;
 	}
 

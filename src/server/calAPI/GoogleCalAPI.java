@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -17,6 +19,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
+import server.exception.ServiceAccessException;
 import server.framework.*;
 
 /**
@@ -60,7 +63,7 @@ public class GoogleCalAPI implements API {
 	}
 
 	// Asks for client and retrieves/parses GCal to our Calendar format
-	public Calendar fetch(HttpSession session) {
+	public Calendar fetch(HttpSession session) throws ServiceAccessException {
 
 		// get client's calendar
 		com.google.api.services.calendar.Calendar client = null;
@@ -131,7 +134,7 @@ public class GoogleCalAPI implements API {
 	 *            The current google client using the app
 	 */
 	public void addEvents(ArrayList<server.framework.Event> e,
-			HttpSession session) {
+			HttpSession session) throws ServiceAccessException {
 
 		// get client's calendar
 		com.google.api.services.calendar.Calendar client = null;

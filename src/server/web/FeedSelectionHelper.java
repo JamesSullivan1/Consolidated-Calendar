@@ -104,9 +104,7 @@ public class FeedSelectionHelper {
 				}
 			}
 		} catch (MalformedURLException e) {
-			// TODO Remove feed string was bad. This should not happen!
-			// It would not have been stored in the first place.
-			e.printStackTrace();
+			// Safe to duck- in this case the URL would not be added in the first place to Session.
 		}
 	}
 }

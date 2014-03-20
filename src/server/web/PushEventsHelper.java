@@ -9,6 +9,7 @@ import javax.servlet.jsp.JspWriter;
 
 import server.calAPI.APIManager;
 import server.calAPI.GoogleCalAPI;
+import server.exception.ServiceAccessException;
 import server.framework.Calendar;
 
 public class PushEventsHelper {
@@ -28,12 +29,12 @@ public class PushEventsHelper {
 
 		try {
 			gCalAPIManager.addEvents(consolidated.getEvents(), session);
-		} catch (IOException e) {
+		} catch (ServiceAccessException e) {
 			// Set error for user.
 			ArrayList<String> errors = (ArrayList<String>) session
 					.getAttribute("parseErrors");
 			synchronized (errors) {
-				errors.add("Failed to get calendar from google: "
+				errors.add("An error occurred when attempting to add events to Google Calendar: "
 						+ e.getMessage());
 			}
 			return;
@@ -42,7 +43,7 @@ public class PushEventsHelper {
 		try {
 			out.println("You're winner");
 		} catch (IOException e) {
-			e.printStackTrace();
+			// Safe to duck - Indicates that the frontend is not responsive.
 		}
 
 	}
