@@ -13,7 +13,6 @@
 		FeedSelectionHelper.showGoogleAuthLink(session, out);
 	else
 		out.println("User is logged in."); // TODO add username
-	// 	FeedSelectionHelper.showCalendarChoice(session, out);
 %>
 
 

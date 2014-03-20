@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
+import server.framework.Calendar;
 import server.oauth.GoogleAuthHelper;
 
 /**
@@ -49,39 +50,61 @@ public class FeedSelectionHelper {
 		@SuppressWarnings("unchecked")
 		ArrayList<URL> icsList = (ArrayList<URL>) session
 				.getAttribute("icsList");
-		if (icsList == null)
-			icsList = new ArrayList<URL>();
 
 		// Pull add request if it exists, and only process if it is not already
 		// saved. Do a basic url check.
 		String newFeed = request.getParameter("addICS");
 		if (newFeed != null) {
-			if (!icsList.contains(newFeed)) {
-				if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) {
-					URL link = null;
-					try {
-						link = new URL(newFeed);
-					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					icsList.add(link);
-				} else
-					session.setAttribute("badFeed", true);
+			try {
+				URL newURL = new URL(newFeed);
+				if (!icsList.contains(newURL)) {
+					if (newFeed.split("\\?")[0].matches("^https?://.+\\.ics$")) {
+						// New ICS feed is good. Create parsing thread.
+						icsList.add(newURL);
+						AddICSThread addICS = new AddICSThread(session, newURL);
+						addICS.start();
+					} else
+						session.setAttribute("badFeed", true);
+				}
+			} catch (MalformedURLException e) {
+				session.setAttribute("badFeed", true);
 			}
 		}
 
 		// Pull remove request and remove feed.
 		try {
-			String removeFeedString = (String)request.getParameter("removeICS");
-			if (removeFeedString != null)
-				icsList.remove(new URL(removeFeedString));
-		}
-		catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			String removeFeedString = (String) request
+					.getParameter("removeICS");
+			if (removeFeedString != null) {
+				URL toRemove = new URL(removeFeedString);
 
-		session.setAttribute("icsList", icsList);
+				// Remove url from ics list.
+				icsList.remove(toRemove);
+
+				// Get stored ics calendar.
+				Calendar oldCal = (Calendar) session.getAttribute(toRemove
+						.toString());
+				if (oldCal != null) {
+					// Remove stored ics calendar from session.
+					session.removeAttribute(toRemove.toString());
+
+					// Get Consolidated session calendar
+					Calendar consolidated = (Calendar) session
+							.getAttribute("consolidatedCalendar");
+
+					synchronized (consolidated) {
+						// Remove events in old calendar from consolidated
+						// calendar
+						consolidated.eventDiff(oldCal);
+
+						// Set new events flag.
+						session.setAttribute("eventsToAdd", !consolidated
+								.getEvents().isEmpty());
+					}
+				}
+			}
+		} catch (MalformedURLException e) {
+			// Safe to duck- in this case the URL would not be added in the first place to Session.
+		}
 	}
 }

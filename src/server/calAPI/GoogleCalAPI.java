@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -17,12 +19,13 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
+import server.exception.ServiceAccessException;
 import server.framework.*;
 
 /**
  * Processes calls to and from the Google Calendar API
  */
-public class GCalAPIManager {
+public class GoogleCalAPI implements API {
 
 	// Utility
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -37,7 +40,7 @@ public class GCalAPIManager {
 	 * @param authCode
 	 *            authentication credential provided by Google
 	 */
-	public static com.google.api.services.calendar.Calendar getClient(
+	private com.google.api.services.calendar.Calendar getClient(
 			HttpSession session) throws IOException {
 
 		Credential credential = (Credential) session
@@ -60,19 +63,33 @@ public class GCalAPIManager {
 	}
 
 	// Asks for client and retrieves/parses GCal to our Calendar format
-	public static Calendar fetchGCal(
-			com.google.api.services.calendar.Calendar client)
-			throws IOException {
+	public Calendar fetch(HttpSession session) throws ServiceAccessException {
+
+		// get client's calendar
+		com.google.api.services.calendar.Calendar client = null;
+		try {
+			client = getClient(session);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 
 		// retrieve primary calendar
-		com.google.api.services.calendar.model.Calendar primeCal = client
-				.calendars().get("primary").execute();
+		com.google.api.services.calendar.model.Calendar primeCal = null;
+		try {
+			primeCal = client.calendars().get("primary").execute();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		String calname = primeCal.getSummary();
 		String servId = primeCal.getId();
 
 		// create google event list
-		com.google.api.services.calendar.model.Events feed = client.events()
-				.list("primary").execute();
+		com.google.api.services.calendar.model.Events feed = null;
+		try {
+			feed = client.events().list("primary").execute();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		List<Event> eventList = feed.getItems();
 
 		// create our event list
@@ -95,14 +112,16 @@ public class GCalAPIManager {
 				String summary = event.getSummary();
 				String location = event.getLocation();
 
-				server.framework.Event temp = new server.framework.Event(
-						summary, location, startDate, endDate);
+				server.framework.Event temp = new server.framework.Event.EventBuilder(
+						summary, startDate).withLocation(location)
+						.withEnd(endDate).build();
 				e.add(temp);
 			}
 		}
 
 		// Construct calendar from google data
-		Calendar c = new Calendar(e, calname, servId);
+		Calendar c = new Calendar.CalendarBuilder(calname, e).withService(
+				servId).build();
 		return c;
 	}
 
@@ -114,19 +133,27 @@ public class GCalAPIManager {
 	 * @param client
 	 *            The current google client using the app
 	 */
-	public static void addEvents(ArrayList<server.framework.Event> e,
-			com.google.api.services.calendar.Calendar client)
-			throws IOException {
+	public void addEvents(ArrayList<server.framework.Event> e,
+			HttpSession session) throws ServiceAccessException {
+
+		// get client's calendar
+		com.google.api.services.calendar.Calendar client = null;
+		try {
+			client = getClient(session);
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+
 		// Get list of google events from our events
 		ArrayList<Event> newEvents = convertEvents(e, client);
 
-		// retrieve primary calendar
-		com.google.api.services.calendar.model.Calendar primeCal = client
-				.calendars().get("primary").execute();
-
 		// Add new events
 		for (Event event : newEvents) {
-			client.events().insert("primary", event).execute();
+			try {
+				client.events().insert("primary", event).execute();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -138,10 +165,12 @@ public class GCalAPIManager {
 	 * @param client
 	 *            The current google client using the app
 	 */
-	private static ArrayList<Event> convertEvents(
-			ArrayList<server.framework.Event> e,
+	private ArrayList<Event> convertEvents(ArrayList<server.framework.Event> e,
 			com.google.api.services.calendar.Calendar client) {
+
+		final int HOUR_IN_MSEC = 3600000;
 		ArrayList<Event> newEvents = new ArrayList<Event>();
+
 		for (server.framework.Event event : e) {
 			Event temp = new Event();
 			temp.setSummary(event.getName());
@@ -152,7 +181,7 @@ public class GCalAPIManager {
 			if (event.getEndDate() == null) {
 				Date start = event.getStartDate();
 				Date end = (Date) start.clone();
-				end.setHours(end.getHours() + 1);
+				end.setTime(end.getTime() + HOUR_IN_MSEC);
 
 				temp.setEnd(new EventDateTime().setDateTime(new DateTime(end)));
 			} else {
@@ -165,7 +194,7 @@ public class GCalAPIManager {
 		return newEvents;
 	}
 
-	private static boolean isAllDayEvent(Event e) {
+	private boolean isAllDayEvent(Event e) {
 		return e.getEnd().getDateTime() == null;
 	}
 

@@ -1,46 +1,51 @@
 package server.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 
-import server.calAPI.GCalAPIManager;
+import server.calAPI.APIManager;
+import server.calAPI.GoogleCalAPI;
+import server.exception.ServiceAccessException;
 import server.framework.Calendar;
 
 public class PushEventsHelper {
 
-	public static void push(HttpServletRequest request, HttpSession session, JspWriter out) {
+	public static void push(HttpServletRequest request, HttpSession session,
+			JspWriter out) {
+
+		// Create Google API Manager
+		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null)
+					.withService("Consolidated-Cal").build();
 		}
-		
-		
-		// Get Consolidated session calendar if it exists
-		com.google.api.services.calendar.Calendar client = (com.google.api.services.calendar.Calendar) session
-				.getAttribute("googleClient");
-		if (client == null) {
-			// TODO Handle errors
-		}
-		
+
 		try {
-			GCalAPIManager.addEvents(consolidated.getEvents(), client);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			gCalAPIManager.addEvents(consolidated.getEvents(), session);
+		} catch (ServiceAccessException e) {
+			// Set error for user.
+			ArrayList<String> errors = (ArrayList<String>) session
+					.getAttribute("parseErrors");
+			synchronized (errors) {
+				errors.add("An error occurred when attempting to add events to Google Calendar: "
+						+ e.getMessage());
+			}
+			return;
 		}
 
 		try {
 			out.println("You're winner");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Safe to duck - Indicates that the frontend is not responsive.
 		}
-		
+
 	}
-	
+
 }
