@@ -2,9 +2,6 @@ package server.framework;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-
-import server.framework.Event.EventBuilder;
 
 /**
  * Calendar - An internal representation of a Calendar.

@@ -4,9 +4,6 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -18,7 +15,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import server.exception.AuthenticationException;
-import server.exception.ServiceAccessException;
 
 /**
  * Helper class for OAuth2 Authentication.\n Constructs a redirection link for
@@ -42,9 +38,7 @@ public final class GoogleAuthHelper {
 
 	// Return URI for google
 	private static final String CALLBACK_URI = "http://localhost:8080/Consolidated-Cal/index.jsp";
-	// RESTful URI for Calendar info request
-	private static final String CALENDAR_LIST_URL = "https://www.googleapis.com/calendar/v3/users/me/calendarList";
-
+	
 	// Utility
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
