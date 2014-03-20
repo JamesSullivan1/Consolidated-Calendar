@@ -113,6 +113,7 @@ public class MergeResultsHelper {
 	 * @param session
 	 *            server session object
 	 */
+	@SuppressWarnings("unchecked")
 	public static void pullGoogleEvents(HttpServletRequest request, HttpSession session) {
 
 		//Create Google API Manager
@@ -124,7 +125,17 @@ public class MergeResultsHelper {
 			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 
-		Calendar primaryGCal = gCalAPIManager.fetch(session);
+		Calendar primaryGCal;
+		try {
+			primaryGCal = gCalAPIManager.fetch(session);
+		} catch (IOException e) {
+			//Set error for user.
+			ArrayList<String> errors = (ArrayList<String>)session.getAttribute("parseErrors");
+			synchronized (errors) {
+				errors.add("Failed to get calendar from google: "+e.getMessage());
+			}
+			return;
+		}
 
 		if (primaryGCal != null) {
 			consolidated.eventDiff(primaryGCal);

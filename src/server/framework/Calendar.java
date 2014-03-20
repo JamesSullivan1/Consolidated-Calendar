@@ -1,5 +1,6 @@
 package server.framework;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,7 +10,8 @@ import server.framework.Event.EventBuilder;
  * Calendar - An internal representation of a Calendar.
  * 
  */
-public class Calendar {
+public class Calendar implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Event> events;
 	private String name;
 	private String service;

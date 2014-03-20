@@ -28,10 +28,12 @@ public class AddICSThread extends Thread {
 	public void run() {
 		ThreadHelper.incrementThreadCount(session);
 
+		System.out.println("Parsing");
 		// Create a unique calendar for the ICS feed located at given url.
 		File inputFile = null;
 		try {
 			inputFile = ICSFeedParser.downloadICSFile(url);
+			System.out.println("Success");
 		} catch (IOException e) {
 			ArrayList<String> errors = (ArrayList<String>) session
 					.getAttribute("parseErrors");

@@ -29,5 +29,5 @@
 </c:if>
 
 <%
-	MergeResultsHelper.showResults(session, out);
+	MergeResultsHelper.showResults(request, session, out);
 %>

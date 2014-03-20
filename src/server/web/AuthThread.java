@@ -2,8 +2,11 @@ package server.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
-import server.calAPI.GCalAPIManager;
+
+import server.calAPI.APIManager;
+import server.calAPI.GoogleCalAPI;
 import server.framework.*;
 
 /**
@@ -32,6 +35,9 @@ public class AuthThread extends Thread {
 	public void run() {
 		ThreadHelper.incrementThreadCount(session);
 		
+		//Create Google API Manager
+		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
+		
 		//Get Consolidated calendar.
 		Calendar consolidated = (Calendar)session.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
@@ -42,15 +48,10 @@ public class AuthThread extends Thread {
 		}
 		
 		//Pull calendar from google.
-		com.google.api.services.calendar.Calendar client = null;
 		Calendar primaryGCal = null;
 		try {
-			//Get client and add to session.
-			client = GCalAPIManager.getClient(session);
-			session.setAttribute("googleClient", client);
-			
 			//Fetch users primary google calendar
-			primaryGCal = GCalAPIManager.fetchGCal(client);
+			primaryGCal = gCalAPIManager.fetch(session);
 		} catch (IOException e) {
 			//Set error for user.
 			ArrayList<String> errors = (ArrayList<String>)session.getAttribute("parseErrors");

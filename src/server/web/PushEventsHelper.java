@@ -1,6 +1,7 @@
 package server.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import server.framework.Calendar;
 
 public class PushEventsHelper {
 
+	@SuppressWarnings("unchecked")
 	public static void push(HttpServletRequest request, HttpSession session, JspWriter out) {
 		
 		//Create Google API Manager
@@ -23,7 +25,16 @@ public class PushEventsHelper {
 			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 		
-		gCalAPIManager.addEvents(consolidated.getEvents(), session);
+		try {
+			gCalAPIManager.addEvents(consolidated.getEvents(), session);
+		} catch (IOException e) {
+			//Set error for user.
+			ArrayList<String> errors = (ArrayList<String>)session.getAttribute("parseErrors");
+			synchronized (errors) {
+				errors.add("Failed to get calendar from google: "+e.getMessage());
+			}
+			return;
+		}
 
 		try {
 			out.println("You're winner");

@@ -1,12 +1,14 @@
 package server.framework;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * An internal representation of an Event in a Calendar.
  * 
  */
-public class Event {
+public class Event implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String name; // Required
 	private String location;
 	private Calendar owner;

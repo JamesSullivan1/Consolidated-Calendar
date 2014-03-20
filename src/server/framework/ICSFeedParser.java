@@ -37,30 +37,30 @@ public final class ICSFeedParser {
 		DataInputStream dis;
 		FileOutputStream fos;
 		ArrayList<Byte> fileData;
-		try {
-			con = link.openConnection();
-			dis = new DataInputStream(con.getInputStream());
-			if (con.getContentLength() < 0) {
-				fileData = new ArrayList<Byte>(65536);
-			} else {
-				fileData = new ArrayList<Byte>(con.getContentLength());
-			}
-			int nextVal;
-			while ((nextVal = dis.read()) > -1) {
-				fileData.add((byte) nextVal);
-			}
-			dis.close();
-			byte[] byteArray = new byte[fileData.size()];
-			for (int i = 0; i < fileData.size(); i++) {
-				byte b = fileData.get(i).byteValue();
-				byteArray[i] = b;
-			}
+		con = link.openConnection();
+		dis = new DataInputStream(con.getInputStream());
+		if (con.getContentLength() < 0) {
+			fileData = new ArrayList<Byte>(65536);
+		} else {
+			fileData = new ArrayList<Byte>(con.getContentLength());
+		}
+		int nextVal;
+		while ((nextVal = dis.read()) > -1) {
+			fileData.add((byte) nextVal);
+		}
+		dis.close();
+		byte[] byteArray = new byte[fileData.size()];
+		for (int i = 0; i < fileData.size(); i++) {
+			byte b = fileData.get(i).byteValue();
+			byteArray[i] = b;
+		}
 
-			fos = new FileOutputStream(f);
-			fos.write(byteArray);
-			fos.close();
-		} catch (IOException io) {
-			System.out.println(io);
+		fos = new FileOutputStream(f);
+		fos.write(byteArray);
+		fos.close();
+		
+		if (!f.exists()) {
+			throw new IOException();
 		}
 
 		return f;
@@ -75,7 +75,7 @@ public final class ICSFeedParser {
 	 * @return A new Calendar corresponding to the parsed information.
 	 * @throws IOException
 	 */
-	public static Calendar getCalendarData(File f) throws IOException {
+	public static Calendar getCalendarData(File f) throws FileNotFoundException, IOException {
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -102,8 +102,8 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return new Calendar.CalendarBuilder(calendarData[0], null)
-				.withService(calendarData[1]).build();
+		return new Calendar.CalendarBuilder(calendarData[0], null).withService(
+				calendarData[1]).build();
 	}
 
 	/**
