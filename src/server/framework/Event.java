@@ -19,7 +19,7 @@ public class Event implements Serializable {
 	/*
 	 * Private contructor for the Event object.
 	 */
-	public Event(EventBuilder builder) {
+	private Event(EventBuilder builder) {
 		this.name = builder.name;
 		this.location = builder.location;
 		this.owner = builder.owner;

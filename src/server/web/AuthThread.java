@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import server.calAPI.APIManager;
 import server.calAPI.GoogleCalAPI;
+import server.exception.ServiceAccessException;
 import server.framework.*;
 
 /**
@@ -58,7 +59,7 @@ public class AuthThread extends Thread {
 
 			// Fetch users primary google calendar
 			primaryGCal = gCalAPIManager.fetch(session);
-		} catch (IOException e) {
+		} catch (ServiceAccessException e) {
 			// Set error for user.
 			ArrayList<String> errors = (ArrayList<String>) session
 					.getAttribute("parseErrors");

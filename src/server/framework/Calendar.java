@@ -26,7 +26,7 @@ public class Calendar implements Serializable {
 	 * @param service
 	 *            A descriptor for the backing service of the Calendar
 	 */
-	public Calendar(CalendarBuilder cb) {
+	private Calendar(CalendarBuilder cb) {
 		this.events = cb.events;
 		this.name = cb.name;
 		this.service = cb.service;

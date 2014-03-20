@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
+
+import server.exception.ICSParseException;
 import server.framework.Calendar;
 import server.framework.Event;
 import server.framework.ICSFeedParser;
@@ -32,7 +35,7 @@ public class AddICSThread extends Thread {
 		File inputFile = null;
 		try {
 			inputFile = ICSFeedParser.downloadICSFile(url);
-		} catch (IOException e) {
+		} catch (ICSParseException e) {
 			ArrayList<String> errors = (ArrayList<String>) session
 					.getAttribute("parseErrors");
 			synchronized (errors) {

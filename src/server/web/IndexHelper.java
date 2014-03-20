@@ -3,10 +3,14 @@ package server.web;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import server.exception.AuthenticationException;
 import server.framework.Calendar;
 import server.oauth.GoogleAuthHelper;
+
 import com.google.api.client.auth.oauth2.Credential;
 
 /**
@@ -24,11 +28,11 @@ public class IndexHelper {
 	 *            server request object
 	 * @param session
 	 *            server session object
-	 * @throws IOException
-	 *             On error converting authentication code to token.
+	 * @throws AuthenticationException
+	 *             On error getting a valid authentication token from Google.
 	 */
 	public static void processGoogleAuth(HttpServletRequest request,
-			HttpSession session) throws IOException {
+			HttpSession session) throws AuthenticationException {
 		String code = request.getParameter("code");
 		String requestState = request.getParameter("state");
 		String sessionState = (String) session.getAttribute("stateString");

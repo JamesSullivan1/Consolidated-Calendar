@@ -27,8 +27,7 @@ public class MergeResultsHelper {
 				out.println("</br>Events still loading. Page will refresh when finished.");
 				return;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Safe to duck - Indicates that the frontend is not responsive.
 			}
 		}
 
@@ -41,8 +40,7 @@ public class MergeResultsHelper {
 				try {
 					out.println(error + "</br>");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					// Safe to duck - Indicates that the frontend is not responsive.
 				}
 			}
 			errors.clear();
@@ -55,8 +53,7 @@ public class MergeResultsHelper {
 			try {
 				out.println("No events found that are not already in your Calendar.");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Safe to duck - Indicates that the frontend is not responsive.
 			}
 		} else {
 			try {
@@ -68,8 +65,7 @@ public class MergeResultsHelper {
 					}
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// Safe to duck - Indicates that the frontend is not responsive.
 			}
 		}
 	}

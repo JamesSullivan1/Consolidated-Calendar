@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
+import server.exception.ServiceAccessException;
 import server.framework.Calendar;
 
 public class APIManager {
@@ -15,11 +16,11 @@ public class APIManager {
 	}
 
 	public void addEvents(ArrayList<server.framework.Event> e,
-			HttpSession session) throws IOException {
+			HttpSession session) throws ServiceAccessException {
 		this.api.addEvents(e, session);
 	}
 
-	public Calendar fetch(HttpSession session) throws IOException {
+	public Calendar fetch(HttpSession session) throws ServiceAccessException {
 		return this.api.fetch(session);
 	}
 }
