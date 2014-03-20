@@ -11,22 +11,23 @@ import server.framework.Calendar;
 
 public class PushEventsHelper {
 
-	public static void push(HttpServletRequest request, HttpSession session, JspWriter out) {
+	public static void push(HttpServletRequest request, HttpSession session,
+			JspWriter out) {
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar.CalendarBuilder("Consolidated",null).withService( "Consolidated-Cal").build();
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null)
+					.withService("Consolidated-Cal").build();
 		}
-		
-		
+
 		// Get Consolidated session calendar if it exists
 		com.google.api.services.calendar.Calendar client = (com.google.api.services.calendar.Calendar) session
 				.getAttribute("googleClient");
 		if (client == null) {
 			// TODO Handle errors
 		}
-		
+
 		try {
 			GCalAPIManager.addEvents(consolidated.getEvents(), client);
 		} catch (IOException e) {
@@ -40,7 +41,7 @@ public class PushEventsHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }
