@@ -1,5 +1,6 @@
 package server.framework;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,7 +10,8 @@ import server.framework.Event.EventBuilder;
  * Calendar - An internal representation of a Calendar.
  * 
  */
-public class Calendar {
+public class Calendar implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Event> events;
 	private String name;
 	private String service;
@@ -52,7 +54,8 @@ public class Calendar {
 	}
 
 	/**
-	 * Add event to the Calendar, ignoring a duplicate event. Sets the Event's owner to be This.
+	 * Add event to the Calendar, ignoring a duplicate event. Sets the Event's
+	 * owner to be This.
 	 * <p>
 	 * <ul>
 	 * <li>Precondition: An event object is provided as input
@@ -100,43 +103,48 @@ public class Calendar {
 			}
 		}
 	}
-	
+
 	/**
-	 * Merges a second calendar into this Calendar, handling redundancy as needed.
+	 * Merges a second calendar into this Calendar, handling redundancy as
+	 * needed.
 	 * <p>
 	 * <ul>
 	 * <li>Precondition: A calendar object is given as input.
-	 * <li>Postcondition: Any events not already in this Calendar are added into it.
+	 * <li>Postcondition: Any events not already in this Calendar are added into
+	 * it.
 	 * </ul>
 	 * 
-	 * @param c The Calendar to be merged in
+	 * @param c
+	 *            The Calendar to be merged in
 	 */
 	public void merge(Calendar c) {
 		for (Event e : c.getEvents()) {
 			addEvent(e);
 		}
 	}
-	
+
 	/**
 	 * Removes all events from this common to the input Calendar
-	 * @param other Calendar to check
+	 * 
+	 * @param other
+	 *            Calendar to check
 	 */
-	public void eventDiff(Calendar other){
-		
-		//other's events
+	public void eventDiff(Calendar other) {
+
+		// other's events
 		if (other.getEvents() == null) {
 			return;
 		}
-		ArrayList<Event> otherEvents= other.getEvents();
-		
-		for(Event e : otherEvents){
+		ArrayList<Event> otherEvents = other.getEvents();
+
+		for (Event e : otherEvents) {
 			removeEvent(e);
 		}
 	}
-	
-	
+
 	/**
-	 * Static Calendar Builder class to enforce the parameters for the creation of Calendars
+	 * Static Calendar Builder class to enforce the parameters for the creation
+	 * of Calendars
 	 * 
 	 * @author james
 	 * 
@@ -173,6 +181,7 @@ public class Calendar {
 			this.service = service;
 			return this;
 		}
+
 		/**
 		 * @return A new Calendar object built by this.
 		 */

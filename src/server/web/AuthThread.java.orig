@@ -36,13 +36,19 @@ public class AuthThread extends Thread {
 	@SuppressWarnings("unchecked")
 	public void run() {
 		ThreadHelper.incrementThreadCount(session);
-
-		// Create Google API Manager
-		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
+<<<<<<< HEAD
 
 		// Get Consolidated calendar.
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
+=======
+		
+		//Create Google API Manager
+		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
+		
+		//Get Consolidated calendar.
+		Calendar consolidated = (Calendar)session.getAttribute("consolidatedCalendar");
+>>>>>>> API_strategy
 		if (consolidated == null) {
 			synchronized (session) {
 				consolidated = new Calendar.CalendarBuilder("Consolidated",
@@ -50,14 +56,26 @@ public class AuthThread extends Thread {
 				session.setAttribute("consolidatedCalendar", consolidated);
 			}
 		}
+<<<<<<< HEAD
 
 		// Pull calendar from google.
+		com.google.api.services.calendar.Calendar client = null;
 		Calendar primaryGCal = null;
 		try {
 			// Get client and add to session.
+			client = GCalAPIManager.getClient(session);
+			session.setAttribute("googleClient", client);
 
 			// Fetch users primary google calendar
+			primaryGCal = GCalAPIManager.fetchGCal(client);
+=======
+		
+		//Pull calendar from google.
+		Calendar primaryGCal = null;
+		try {
+			//Fetch users primary google calendar
 			primaryGCal = gCalAPIManager.fetch(session);
+>>>>>>> API_strategy
 		} catch (IOException e) {
 			// Set error for user.
 			ArrayList<String> errors = (ArrayList<String>) session

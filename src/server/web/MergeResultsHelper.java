@@ -16,11 +16,12 @@ public class MergeResultsHelper {
 	/**
 	 * Shows the found events that will be sent to the output calendar.
 	 * 
-	 * @param session server session object
+	 * @param session
+	 *            server session object
 	 * @param out
 	 */
 	public static void showResults(HttpSession session, JspWriter out) {
-		//Verify results are ready to show, otherwise show loading.
+		// Verify results are ready to show, otherwise show loading.
 		if (!ThreadHelper.isThreadsFinished(session)) {
 			try {
 				out.println("</br>Events still loading. Page will refresh when finished.");
@@ -30,19 +31,22 @@ public class MergeResultsHelper {
 				e.printStackTrace();
 			}
 		}
-		
-		//Print out any encountered parsing errors.
+
+		// Print out any encountered parsing errors.
 		@SuppressWarnings("unchecked")
-		ArrayList<String> errors = (ArrayList<String>)session.getAttribute("parseErrors");
-		if (errors != null)
-			for (String error : errors)
+		ArrayList<String> errors = (ArrayList<String>) session
+				.getAttribute("parseErrors");
+		if (errors != null) {
+			for (String error : errors) {
 				try {
-					out.println(error+"</br>");
+					out.println(error + "</br>");
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-	
+			}
+			errors.clear();
+		}
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");

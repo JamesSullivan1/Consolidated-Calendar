@@ -36,7 +36,7 @@ public final class GoogleAuthHelper {
 			"https://www.googleapis.com/auth/userinfo.profile",
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/calendar");
-	
+
 	// Return URI for google
 	private static final String CALLBACK_URI = "http://localhost:8080/Consolidated-Cal/index.jsp";
 	// RESTful URI for Calendar info request
@@ -91,14 +91,15 @@ public final class GoogleAuthHelper {
 	public String getStateToken() {
 		return stateToken;
 	}
-	
+
 	/**
 	 * Uses a given authentication code to request and return an authentication
 	 * token which can be used to push and pull data from Google.
 	 * 
-	 * @param authCode authentication code provided by google
+	 * @param authCode
+	 *            authentication code provided by google
 	 * @return Authentication token wrapped in a credential object.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public Credential getAuthToken(final String authCode) throws IOException {
 		// Gets a response token from Google
@@ -118,11 +119,12 @@ public final class GoogleAuthHelper {
 	 * @param authCode
 	 *            authentication credential provided by Google
 	 */
-	public String getCalendarListJson(final Credential credential) throws IOException {
+	public String getCalendarListJson(final Credential credential)
+			throws IOException {
 		// Construct http request.
 		final HttpRequestFactory requestFactory = HTTP_TRANSPORT
 				.createRequestFactory(credential);
-		
+
 		// Make an authenticated request
 		final GenericUrl url = new GenericUrl(CALENDAR_LIST_URL);
 		final HttpRequest request = requestFactory.buildGetRequest(url);

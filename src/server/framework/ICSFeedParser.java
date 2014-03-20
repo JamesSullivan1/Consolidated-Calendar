@@ -7,8 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,8 +15,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.sun.org.apache.bcel.internal.util.ByteSequence;
 
 public final class ICSFeedParser {
 
@@ -31,40 +27,40 @@ public final class ICSFeedParser {
 	 * @param link
 	 *            The URL pointing to a .ics file download.
 	 * @return A local file reference link to the .ics file.
-	 * @throws IOException If the file could not be accessed.
+	 * @throws IOException
 	 */
 	public static File downloadICSFile(URL link) throws IOException {
 		Random r = new Random();
 		int rand = r.nextInt(65536);
-		File f = new File("cc" + rand + ".ics");
+		File f = new File(rand + ".ics");
 		URLConnection con;
 		DataInputStream dis;
 		FileOutputStream fos;
 		ArrayList<Byte> fileData;
-		try {
-			con = link.openConnection();
-			dis = new DataInputStream(con.getInputStream());
-			if (con.getContentLength() < 0) {
-				fileData = new ArrayList<Byte>(65536);
-			} else {
-				fileData = new ArrayList<Byte>(con.getContentLength());
-			}
-			int nextVal;
-			while ((nextVal = dis.read()) > -1) {
-				fileData.add((byte) nextVal);
-			}
-			dis.close();
-			byte[] byteArray = new byte[fileData.size()];
-			for (int i = 0; i < fileData.size(); i++) {
-				byte b = fileData.get(i).byteValue();
-				byteArray[i] = b;
-			}
+		con = link.openConnection();
+		dis = new DataInputStream(con.getInputStream());
+		if (con.getContentLength() < 0) {
+			fileData = new ArrayList<Byte>(65536);
+		} else {
+			fileData = new ArrayList<Byte>(con.getContentLength());
+		}
+		int nextVal;
+		while ((nextVal = dis.read()) > -1) {
+			fileData.add((byte) nextVal);
+		}
+		dis.close();
+		byte[] byteArray = new byte[fileData.size()];
+		for (int i = 0; i < fileData.size(); i++) {
+			byte b = fileData.get(i).byteValue();
+			byteArray[i] = b;
+		}
 
-			fos = new FileOutputStream(f);
-			fos.write(byteArray);
-			fos.close();
-		} catch (IOException io) {
-			throw io;
+		fos = new FileOutputStream(f);
+		fos.write(byteArray);
+		fos.close();
+
+		if (!f.exists()) {
+			throw new IOException();
 		}
 
 		return f;
@@ -79,8 +75,8 @@ public final class ICSFeedParser {
 	 * @return A new Calendar corresponding to the parsed information.
 	 * @throws IOException
 	 */
-	public static Calendar getCalendarData(File f) throws IOException {
-
+	public static Calendar getCalendarData(File f)
+			throws FileNotFoundException, IOException {
 		Scanner parser = new Scanner(f);
 		parser.useDelimiter(Pattern.compile("\\n"));
 		String current = null;
@@ -107,7 +103,8 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return new Calendar.CalendarBuilder(calendarData[0], null).withService(calendarData[1]).build();
+		return new Calendar.CalendarBuilder(calendarData[0], null).withService(
+				calendarData[1]).build();
 	}
 
 	/**
@@ -181,7 +178,7 @@ public final class ICSFeedParser {
 					// Store valid parsed event data in a new Event
 					if (validEventParsed) {
 						Event e = new Event.EventBuilder(eventData[0], start)
-								.withEnd(end).withLocation(eventData[1])
+								.withLocation(eventData[1]).withEnd(end)
 								.build();
 						eventList.add(e);
 					}

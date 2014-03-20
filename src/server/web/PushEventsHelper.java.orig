@@ -13,11 +13,9 @@ import server.framework.Calendar;
 
 public class PushEventsHelper {
 
+<<<<<<< HEAD
 	public static void push(HttpServletRequest request, HttpSession session,
 			JspWriter out) {
-
-		// Create Google API Manager
-		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
@@ -26,15 +24,27 @@ public class PushEventsHelper {
 					.withService("Consolidated-Cal").build();
 		}
 
+=======
+	@SuppressWarnings("unchecked")
+	public static void push(HttpServletRequest request, HttpSession session, JspWriter out) {
+		
+		//Create Google API Manager
+		APIManager gCalAPIManager = new APIManager(new GoogleCalAPI());
+		
+>>>>>>> API_strategy
+		// Get Consolidated session calendar if it exists
+		Calendar consolidated = (Calendar) session.getAttribute("consolidatedCalendar");
+		if (consolidated == null) {
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
+		}
+
 		try {
 			gCalAPIManager.addEvents(consolidated.getEvents(), session);
 		} catch (IOException e) {
-			// Set error for user.
-			ArrayList<String> errors = (ArrayList<String>) session
-					.getAttribute("parseErrors");
+			//Set error for user.
+			ArrayList<String> errors = (ArrayList<String>)session.getAttribute("parseErrors");
 			synchronized (errors) {
-				errors.add("Failed to get calendar from google: "
-						+ e.getMessage());
+				errors.add("Failed to get calendar from google: "+e.getMessage());
 			}
 			return;
 		}
