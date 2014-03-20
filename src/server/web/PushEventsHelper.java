@@ -20,7 +20,7 @@ public class PushEventsHelper {
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 		
 		gCalAPIManager.addEvents(consolidated.getEvents(), session);

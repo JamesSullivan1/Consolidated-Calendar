@@ -111,14 +111,14 @@ public class GoogleCalAPI implements API{
 				String summary = event.getSummary();
 				String location = event.getLocation();
 
-				server.framework.Event temp = new server.framework.Event(
-						summary, location, startDate, endDate);
+				server.framework.Event temp = new server.framework.Event.EventBuilder(
+						summary, startDate).withLocation(location).withEnd(endDate).build();
 				e.add(temp);
 			}
 		}
 
 		// Construct calendar from google data
-		Calendar c = new Calendar(e, calname, servId);
+		Calendar c = new Calendar.CalendarBuilder(calname, e).withService(servId).build();
 		return c;
 	}
 

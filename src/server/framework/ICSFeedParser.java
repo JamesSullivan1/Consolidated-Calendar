@@ -47,7 +47,7 @@ public final class ICSFeedParser {
 			}
 			int nextVal;
 			while ((nextVal = dis.read()) > -1) {
-				fileData.add((byte)nextVal);
+				fileData.add((byte) nextVal);
 			}
 			dis.close();
 			byte[] byteArray = new byte[fileData.size()];
@@ -55,7 +55,7 @@ public final class ICSFeedParser {
 				byte b = fileData.get(i).byteValue();
 				byteArray[i] = b;
 			}
-			
+
 			fos = new FileOutputStream(f);
 			fos.write(byteArray);
 			fos.close();
@@ -102,7 +102,8 @@ public final class ICSFeedParser {
 			}
 		}
 		parser.close();
-		return new Calendar(calendarData[0], calendarData[1]);
+		return new Calendar.CalendarBuilder(calendarData[0], null)
+				.withService(calendarData[1]).build();
 	}
 
 	/**
@@ -129,7 +130,7 @@ public final class ICSFeedParser {
 			current = parser.next();
 			boolean inEvent = false;
 
-			//Events starts here
+			// Events starts here
 			if (current.equals("BEGIN:VEVENT\r")) {
 				inEvent = true;
 			}
@@ -173,15 +174,11 @@ public final class ICSFeedParser {
 					boolean validEventParsed = eventData[0] != null
 							&& eventData[1] != null && start != null;
 
-					//Store valid parsed event data in a new Event
+					// Store valid parsed event data in a new Event
 					if (validEventParsed) {
-						Event e = null;
-						if (eventData[3] == null) {
-							e = new Event(eventData[0], eventData[1], start);
-						} else {
-							e = new Event(eventData[0], eventData[1], start,
-									end);
-						}
+						Event e = new Event.EventBuilder(eventData[0], start)
+								.withLocation(eventData[1]).withEnd(end)
+								.build();
 						eventList.add(e);
 					}
 

@@ -50,7 +50,7 @@ public class MergeResultsHelper {
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 
 		// Get session eventsToAdd if it exist
@@ -121,7 +121,7 @@ public class MergeResultsHelper {
 		// Get Consolidated session calendar if it exists
 		Calendar consolidated = (Calendar) session.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 
 		Calendar primaryGCal = gCalAPIManager.fetch(session);
@@ -139,7 +139,7 @@ public class MergeResultsHelper {
 		Calendar consolidated = (Calendar) session
 				.getAttribute("consolidatedCalendar");
 		if (consolidated == null) {
-			consolidated = new Calendar("Consolidated", "Consolidated-Cal");
+			consolidated = new Calendar.CalendarBuilder("Consolidated", null).withService("Consolidated-Cal").build();
 		}
 
 		if (consolidated.getEvents().isEmpty()) {
