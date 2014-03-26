@@ -3,6 +3,8 @@ package test;
 import static org.junit.Assert.*;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import org.junit.After;
 import org.junit.Before;
@@ -87,15 +89,9 @@ public class TestICSDownload
 		{
 		try
 			{
-			URL test = new URL("https://www.dropbox.com/s/tod0n570a9ag5hc/emptyfeed.ics");
+			URL test = new URL("https://dl.dropboxusercontent.com/s/tod0n570a9ag5hc/emptyfeed.ics?dl=1&token_hash=AAF6AAtthNHUglR9PcSYlPo0J3i0P1TN3OxhngkehPPfJg");
 			file = ICSFeedParser.downloadICSFile(test);
-			fail("file with no content should be rejected");
-
-			// Confirm file was downloaded.
-			if (file == null) fail("Null file returned");
-
-			if (!file.exists()) fail("File doesn't exist");
-
+			fail("empty file should not be returned");
 			}
 		catch (MalformedURLException e)
 			{
@@ -103,7 +99,7 @@ public class TestICSDownload
 			}
 		catch (ICSParseException e)
 			{
-			//We want this exception.
+			//We want this to happen.
 			}
 		}
 
@@ -118,12 +114,9 @@ public class TestICSDownload
 			URL test = new URL(
 					"https://d2l.ucalgary.ca/d2l/le/calendar/feed/user/feed.ics?token=act28krc91pc7yfo59a1");
 			file = ICSFeedParser.downloadICSFile(test);
-
 			// Confirm file was downloaded.
 			if (file == null) fail("Null file returned");
-
 			if (!file.exists()) fail("File doesn't exist");
-
 			}
 		catch (MalformedURLException e)
 			{
@@ -144,12 +137,9 @@ public class TestICSDownload
 					"https://www.google.com/calendar/ical/ej9g9brg1e9ki2vrfddsu6nsvs%40"+
 					"group.calendar.google.com/private-d1872874aa94cf4a7c253ba0949b9058/basic.ics");
 			file = ICSFeedParser.downloadICSFile(test);
-
 			// Confirm file was downloaded.
 			if (file == null) fail("Null file returned");
-
 			if (!file.exists()) fail("File doesn't exist");
-
 			}
 		catch (MalformedURLException e)
 			{

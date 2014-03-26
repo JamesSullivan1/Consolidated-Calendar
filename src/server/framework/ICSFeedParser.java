@@ -1,9 +1,11 @@
 package server.framework;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,7 +17,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import server.exception.ICSParseException;
 
 public final class ICSFeedParser {
@@ -32,6 +33,10 @@ public final class ICSFeedParser {
 	 * @throws IOException
 	 */
 	public static File downloadICSFile(URL link) throws ICSParseException {
+		//Do quick verify of URL.
+		if (!link.toExternalForm().split("\\?")[0].matches("^https?://.+\\.ics$"))
+			throw new ICSParseException(link + ": url is invalid");
+	
 		Random r = new Random();
 		int rand = r.nextInt(65536);
 		File f = new File(rand + ".ics");
@@ -64,6 +69,14 @@ public final class ICSFeedParser {
 
 			if (!f.exists()) {
 				throw new IOException();
+			}
+			
+			//Ensure file has content.
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			if (br.readLine() == null) {
+				br.close();
+				f.delete();
+				throw new ICSParseException(link+": file is empty");
 			}
 		} catch (IOException e) {
 			throw new ICSParseException(e.getMessage());
