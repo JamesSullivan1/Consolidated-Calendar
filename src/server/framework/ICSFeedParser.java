@@ -78,6 +78,7 @@ public final class ICSFeedParser {
 				f.delete();
 				throw new ICSParseException(link+": file is empty");
 			}
+			br.close();
 		} catch (IOException e) {
 			throw new ICSParseException(e.getMessage());
 		}
