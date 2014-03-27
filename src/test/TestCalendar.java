@@ -45,7 +45,7 @@ public class TestCalendar {
 
 	/*
 	 * Contains events with 100 static dates, all separated by 5ms from the
-	 * epoch
+	 * epoch, labeled incrementally by an integer (0-99).
 	 */
 	Calendar setup_nonempty_B(String service) {
 		ArrayList<Event> events = new ArrayList<Event>();
@@ -71,7 +71,7 @@ public class TestCalendar {
 
 	/*
 	 * Contains events with 100 static dates, all separated by 5ms from the
-	 * epoch (plus 50)
+	 * epoch (plus 50), labeled to match the nonempty_B event list (10-109)
 	 */
 	Calendar setup_nonempty_C(String service) {
 		ArrayList<Event> events = new ArrayList<Event>();
@@ -295,11 +295,6 @@ public class TestCalendar {
 			}
 		}
 		assertTrue(sameList);
-	}
-
-	@Test
-	public void test() {
-
 	}
 
 }
