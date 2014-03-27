@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import java.io.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
+import server.framework.Calendar;
+import server.framework.Calendar.CalendarBuilder;
 import server.framework.ICSFeedParser;
 
 public class TestParser {
@@ -43,8 +44,6 @@ public class TestParser {
 		}
 	}
 
-	
-	//Starting with this test I need a way to access pre-created ICS files
 	@Test
 	public void ParseInvalidFileCalendar(){
 		File f = new File("INVALID");
@@ -56,7 +55,7 @@ public class TestParser {
 		}
 		catch(IOException eio){
 			boolean pass = true;
-			assert(pass);
+			assertTrue(pass);
 		}
 	}
 
@@ -71,12 +70,46 @@ public class TestParser {
 		}
 		catch(IOException eio){
 			boolean pass = true;
-			assert(pass);
+			assertTrue(pass);
 		}
 	}
 
+	//WARN: CANNOT COMPARE STRINGS
 	@Test
-	public void ParseWrongFormatCalendar(){					//I need a way to read actual pre-created .ics files in a way that is environment independent
+	public void ParseCalendarNoService(){
+		Calendar expect = new server.framework.Calendar.CalendarBuilder("", null).withService("").build();
+		File f = new File("nocalservice.ics");
+		try{
+			assertTrue(expect.getService().matches(ICSFeedParser.getCalendarData(f).getService()));
+		}
+		catch(FileNotFoundException enf){
+			fail("Exception caught!\nGot: FileNotFoundException\nExpected: Valid File parse (return valid calendar)");
+		}
+		catch(IOException eio){
+			fail("Exception caught!\nGot: IOException\nExpected: Valid File parse (return valid calendar)");
+		}
+	}
+
+	//WARN: CANNOT COMPARE STRINGS
+	//MAKE FILE WITH FILENAME
+	@Test
+	public void ParseCalendarNoName(){
+		Calendar expect = new server.framework.Calendar.CalendarBuilder("", null).withService("").build();
+		File f = new File("nocalname.ics");
+		try{
+			assertSame(expect,ICSFeedParser.getCalendarData(f));
+		}
+		catch(FileNotFoundException enf){
+			fail("Exception caught!\nGot: FileNotFoundException\nExpected: Valid File parse (return valid calendar)");
+		}
+		catch(IOException eio){
+			fail("Exception caught!\nGot: IOException\nExpected: Valid File parse (return valid calendar)");
+		}
+	}
+	
+	@Test
+	public void ParseWrongFormatCalendar(){
+		//The formating for calendar name and service ID is broken in this file.
 		File f = new File("wrongformat_c.ics");
 		try{
 			ICSFeedParser.getCalendarData(f);
@@ -86,12 +119,13 @@ public class TestParser {
 		}
 		catch(IOException eio){
 			boolean pass = true;
-			assert(pass);
+			assertTrue(pass);
 		}
 	}
 
 	@Test
 	public void ParseWrongFormatEvents(){
+		//Event formatting (Begin and End) is broken
 		File f = new File("wrongformat_e.ics");
 		try{
 			ICSFeedParser.getEvents(f);
@@ -101,7 +135,7 @@ public class TestParser {
 		}
 		catch(IOException eio){
 			boolean pass = true;
-			assert(pass);
+			assertTrue(pass);
 		}
 	}
 
@@ -132,8 +166,4 @@ public class TestParser {
 			fail("Exception caught!\nGot: IOException\nExpected: Valid File parse (return valid event list)");
 		}
 	}
-
-	//Same with the two above - need to read files without hardcoding a path
-	//Make sure you test specific cases unique to Calendar or Event parsing as well.
-
 }
