@@ -14,6 +14,7 @@ import server.framework.Calendar;
 
 public class PushEventsHelper {
 
+	@SuppressWarnings("unchecked")
 	public static void push(HttpServletRequest request, HttpSession session,
 			JspWriter out) {
 

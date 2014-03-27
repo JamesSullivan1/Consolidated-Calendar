@@ -12,7 +12,7 @@
 	if (session.getAttribute("authCredential") == null)
 		FeedSelectionHelper.showGoogleAuthLink(session, out);
 	else
-		out.println("User is logged in."); // TODO add username
+		out.println("User is logged in.");
 %>
 
 
