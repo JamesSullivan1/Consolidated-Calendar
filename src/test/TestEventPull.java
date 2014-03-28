@@ -164,6 +164,10 @@ public class TestEventPull {
 	 * Assert that the account connecting is the test account.
 	 */
 	public static boolean validateAccountIdentity(HttpSession session, JspWriter out) throws IOException{
+		if (session.getAttribute("authCredential") == null) {
+			out.println("</br>Need to reauthenticate. Return to index.jsp");
+			return false;
+		}
 		HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 		// Construct a credentials request
 		final Credential credential = (Credential) session.getAttribute("authCredential");
