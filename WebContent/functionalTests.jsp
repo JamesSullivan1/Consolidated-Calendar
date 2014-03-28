@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page isELIgnored="false"%>
+<%@ page import="test.TestEventPull"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="server.framework.Event"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,20 +13,12 @@
 </head>
 <body>
 
+<c:if test="${sessionScope.threadCount > 0}">
+	<meta http-equiv="refresh" content="1" />
+</c:if>
+
 <%
-//Confirm logged in to google.
-Object authCheck = session.getAttribute("authCredential");
-if (authCheck == null)
-	{
-	out.println("Please return to index.jsp and log in to the test google account before visiting this page.");
-	}
-else
-	{
-	//Run the different test methods here, giving them session object to pull session and jspwriter out object
-	//for the test output to print back into this page.
-	//
-	//The methods can still be in TestEventPull / TestEventPush and can be called from here.
-	}
+TestEventPull.testSuccessfulPull(session, out, new ArrayList<Event>());
 %>
 
 </body>
