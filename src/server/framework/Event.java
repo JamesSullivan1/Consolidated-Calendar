@@ -79,9 +79,22 @@ public class Event implements Serializable {
 	 * @return True if the events are identical.
 	 */
 	public boolean equals(Event event) {
-		boolean nameEquals = (event.getName().equalsIgnoreCase(this.getName()));
-		boolean startDateEquals = event.getStartDate().equals(
-				this.getStartDate());
+		//It ain't equal to null
+		if (event == null){
+			return false;
+		}
+		
+		boolean nameEquals = (event.getName() == null) == (this.name == null);
+		boolean startDateEquals = (event.getStartDate() == null) == (this.startDate == null);
+		
+		//test equality of each attribute
+		if (event.getName() != null && this.name != null){
+			nameEquals = (event.getName().equalsIgnoreCase(this.getName()));
+		}
+		
+		if (event.getStartDate() != null && this.startDate != null){
+			startDateEquals = event.getStartDate().equals(this.getStartDate());
+		}
 
 		boolean endDateEquals = false;
 		if (event.hasEndDate() && this.hasEndDate()) {
