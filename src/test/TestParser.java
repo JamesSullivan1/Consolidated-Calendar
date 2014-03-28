@@ -74,13 +74,12 @@ public class TestParser {
 		}
 	}
 
-	//WARN: CANNOT COMPARE STRINGS
 	@Test
 	public void ParseCalendarNoService(){
-		Calendar expect = new server.framework.Calendar.CalendarBuilder("", null).withService("").build();
+		Calendar expect = new server.framework.Calendar.CalendarBuilder("test", null).withService("\r").build();
 		File f = new File("nocalservice.ics");
 		try{
-			assertTrue(expect.getService().matches(ICSFeedParser.getCalendarData(f).getService()));
+			assertTrue(expect.getService().equals(ICSFeedParser.getCalendarData(f).getService()));
 		}
 		catch(FileNotFoundException enf){
 			fail("Exception caught!\nGot: FileNotFoundException\nExpected: Valid File parse (return valid calendar)");
@@ -90,14 +89,12 @@ public class TestParser {
 		}
 	}
 
-	//WARN: CANNOT COMPARE STRINGS
-	//MAKE FILE WITH FILENAME
 	@Test
 	public void ParseCalendarNoName(){
-		Calendar expect = new server.framework.Calendar.CalendarBuilder("", null).withService("").build();
+		Calendar expect = new server.framework.Calendar.CalendarBuilder("\r", null).withService("test").build();
 		File f = new File("nocalname.ics");
 		try{
-			assertSame(expect,ICSFeedParser.getCalendarData(f));
+			assertEquals(expect.getName(),ICSFeedParser.getCalendarData(f).getName());
 		}
 		catch(FileNotFoundException enf){
 			fail("Exception caught!\nGot: FileNotFoundException\nExpected: Valid File parse (return valid calendar)");
