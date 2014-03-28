@@ -156,6 +156,8 @@ public class TestEventPull {
 				out.println("</br>" + e.toString());
 			}
 			
+		} else {
+			out.println("<br><h1><b>No errors in Event Pulling.");
 		}
 
 	}

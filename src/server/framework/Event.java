@@ -95,17 +95,36 @@ public class Event implements Serializable {
 		}
 		
 		if (event.getStartDate() != null && this.startDate != null){
-			startDateEquals = event.getStartDate().equals(this.getStartDate());
+			startDateEquals = compareDatesToMinute(this.startDate, event.getStartDate());
 		}
 
 		boolean endDateEquals = false;
 		if (event.hasEndDate() && this.hasEndDate()) {
-			endDateEquals = event.getEndDate().equals(this.getEndDate());
+			endDateEquals = compareDatesToMinute(this.endDate, event.getEndDate());
 		} else {
 			endDateEquals = (!event.hasEndDate() && !this.hasEndDate());
 		}
 
 		return nameEquals && startDateEquals && endDateEquals;
+	}
+	
+	// Returns true iff the two dates are equal to the MINUTE.
+	private boolean compareDatesToMinute(Date d1, Date d2) {
+	       java.util.Calendar c1 = java.util.Calendar.getInstance();
+	       c1.clear();
+	       c1.setTime(d1);
+	       c1.set(java.util.Calendar.SECOND, 0);
+	       c1.set(java.util.Calendar.MILLISECOND, 0);
+	       Date truncatedD1 = c1.getTime();
+	       
+	       java.util.Calendar c2 = java.util.Calendar.getInstance(); 
+	       c2.clear();
+	       c2.setTime(d2);
+	       c2.set(java.util.Calendar.SECOND, 0);
+	       c2.set(java.util.Calendar.MILLISECOND, 0);
+	       Date truncatedD2 = c1.getTime();
+	       
+	       return truncatedD1.equals(truncatedD2);
 	}
 
 	/**

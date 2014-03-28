@@ -66,6 +66,8 @@ public class TestEventPush {
 				for (Event e : a) {
 					out.println("</br>" + e.toString());
 				}
+				out.println("<br><h1><b>No errors in Event Pushing.</b></h1>");
+
 			} catch (IOException e1) {
 				// Safe to duck - Indicates that the frontend is not responsive.
 			}
@@ -84,5 +86,5 @@ public class TestEventPush {
 		}
 		return a;
 	}
-	
+
 }
