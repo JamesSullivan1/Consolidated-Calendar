@@ -78,11 +78,13 @@ public class Event implements Serializable {
 	 *            event the event to compare.
 	 * @return True if the events are identical.
 	 */
-	public boolean equals(Event event) {
-		//It ain't equal to null
-		if (event == null){
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Event)){
 			return false;
 		}
+		// Safe to cast to Event now
+		Event event = (Event)o;
 		
 		boolean nameEquals = (event.getName() == null) == (this.name == null);
 		boolean startDateEquals = (event.getStartDate() == null) == (this.startDate == null);

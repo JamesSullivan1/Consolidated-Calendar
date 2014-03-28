@@ -33,7 +33,7 @@ public final class GoogleAuthHelper {
 	// Scope declaration for authentication access
 	private static final Iterable<String> SCOPE = Arrays.asList(
 			"https://www.googleapis.com/auth/userinfo.profile",
-			"https://www.googleapis.com/auth/userinfo.email",
+			"email",
 			"https://www.googleapis.com/auth/calendar");
 
 	// Return URI for google
