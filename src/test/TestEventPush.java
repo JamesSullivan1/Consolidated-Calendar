@@ -62,9 +62,9 @@ public class TestEventPush {
 		try {
 			gCalAPIManager.addEvents(a, session);
 			try {
-				out.println("</br>Successful event push:");
+				out.println("</br><h1><b>Events successfully pushed:</b></h1>");
 				for (Event e : a) {
-					out.println(e.toString());
+					out.println("</br>" + e.toString());
 				}
 			} catch (IOException e1) {
 				// Safe to duck - Indicates that the frontend is not responsive.
@@ -72,9 +72,9 @@ public class TestEventPush {
 
 		} catch (ServiceAccessException e1) {
 			try {
-				out.println("</br>Failed to push events:");
+				out.println("</br><h1><b>Failed to push events:</b></h1>");
 				for (Event e : a) {
-					out.println("\n " + e.toString());
+					out.println("</br>" + e.toString());
 				}
 				return null;
 			} catch (IOException e2) {
@@ -84,5 +84,5 @@ public class TestEventPush {
 		}
 		return a;
 	}
-
+	
 }

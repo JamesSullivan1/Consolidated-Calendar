@@ -24,6 +24,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+
 public class TestEventPull {
 	private static final String DATE_FORMAT_STRING = "MM dd HH:mm:ss z yyyy";
 	/*
@@ -60,6 +67,8 @@ public class TestEventPull {
 
 	private static final String TEST_ACCOUNT = "consolidated.calendar@gmail.com";
 	private static final String TEST_PASS = "O2aKBY9B";
+	
+	private static final String USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json";
 
 	public static void testSuccessfulPull(HttpSession session, JspWriter out,
 			ArrayList<Event> events) throws IOException {
@@ -128,7 +137,6 @@ public class TestEventPull {
 		iter = testEvents.iterator(); 
 		while(iter.hasNext()) {
 			Event e = iter.next();
-			out.println("</br> GOOGLE" + gEvents.toString() + "</br> LOCAL" + e.toString());
 			if(!gEvents.contains(e)) {
 				if (calendarsMatch) {
 					calendarsMatch = false;
@@ -137,18 +145,41 @@ public class TestEventPull {
 			}
 		}
 
-		out.println("</br>Succeeded in pulling the following events");
+		out.println("</br><h1><b>Succeeded in pulling the following events:</b></h1>");
 		for (Event e : gEvents) {
 			out.println("</br>" + e.toString());
 		}
 
 		if (!calendarsMatch) {
-			out.println("</br>Failed to pull the following events from Google:");
+			out.println("</br><h1><b>Failed something :</b></h1>:");
 			for (Event e : invalidEvents) {
 				out.println("</br>" + e.toString());
 			}
+			
 		}
 
+	}
+	
+	/**
+	 * Assert that the account connecting is the test account.
+	 */
+	public static boolean validateAccountIdentity(HttpSession session, JspWriter out) throws IOException{
+		HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+		// Construct a credentials request
+		final Credential credential = (Credential) session.getAttribute("authCredential");
+		final HttpRequestFactory requestFactory = HTTP_TRANSPORT
+		.createRequestFactory(credential);
+		// Make an authenticated request
+		final GenericUrl url = new GenericUrl(USER_INFO_URL);
+		final HttpRequest request = requestFactory.buildGetRequest(url);
+		request.getHeaders().setContentType("application/json");
+		final String jsonIdentity = request.execute().parseAsString();
+		
+		boolean isValid = jsonIdentity.contains(TEST_ACCOUNT);
+		if(!isValid) {
+			out.println("</br> Invalid account- use the test account ONLY.");
+		}
+		return isValid;
 	}
 
 }
