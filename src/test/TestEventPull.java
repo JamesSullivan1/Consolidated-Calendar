@@ -151,13 +151,13 @@ public class TestEventPull {
 		}
 
 		if (!calendarsMatch) {
-			out.println("</br><h1><b>Failed something :</b></h1>:");
+			out.println("</br><h1><b>Failed something :</b></h1>");
 			for (Event e : invalidEvents) {
 				out.println("</br>" + e.toString());
 			}
 			
 		} else {
-			out.println("<br><h1><b>No errors in Event Pulling.");
+			out.println("<br><h1><b>No errors in Event Pulling.</b></h1>");
 		}
 
 	}
