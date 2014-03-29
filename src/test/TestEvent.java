@@ -10,6 +10,7 @@ import server.framework.Calendar;
 import server.framework.Event;
 
 public class TestEvent {
+	public static final long MIN_IN_MSEC = 60000l;
 	
 	@Test
 	public void testEventBuilder_defaults() {
@@ -142,7 +143,7 @@ public class TestEvent {
 		
 		String name1 = "eventName1";
 		Date start1 = new Date(0);
-		Date start2 = new Date(1);
+		Date start2 = new Date(MIN_IN_MSEC);
 		
 		Event.EventBuilder a = new Event.EventBuilder(name1, start1);
 		Event.EventBuilder b = new Event.EventBuilder(name1, start2);
@@ -160,7 +161,7 @@ public class TestEvent {
 		String name1 = "eventName1";
 		Date start1 = new Date(0);
 		Date end1 = new Date(1000);
-		Date end2 = new Date(1001);
+		Date end2 = new Date(1000 + MIN_IN_MSEC);
 		
 		Event.EventBuilder a = new Event.EventBuilder(name1, start1);
 		Event.EventBuilder b = new Event.EventBuilder(name1, start1);

@@ -46,7 +46,7 @@ public class TestParser {
 
 	@Test
 	public void ParseInvalidFileCalendar(){
-		File f = new File("INVALID");
+		File f = new File("resources/icsTestFiles/INVALID");
 		try{
 			ICSFeedParser.getCalendarData(f);
 		}
@@ -61,7 +61,7 @@ public class TestParser {
 
 	@Test
 	public void ParseInvalidFileEvents(){
-		File f = new File("INVALID");
+		File f = new File("resources/icsTestFiles/INVALID");
 		try{
 			ICSFeedParser.getEvents(f);
 		}
@@ -77,7 +77,7 @@ public class TestParser {
 	@Test
 	public void ParseCalendarNoService(){
 		Calendar expect = new server.framework.Calendar.CalendarBuilder("test", null).withService("\r").build();
-		File f = new File("nocalservice.ics");
+		File f = new File("resources/icsTestFiles/nocalservice.ics");
 		try{
 			assertTrue(expect.getService().equals(ICSFeedParser.getCalendarData(f).getService()));
 		}
@@ -92,7 +92,7 @@ public class TestParser {
 	@Test
 	public void ParseCalendarNoName(){
 		Calendar expect = new server.framework.Calendar.CalendarBuilder("\r", null).withService("test").build();
-		File f = new File("nocalname.ics");
+		File f = new File("resources/icsTestFiles/nocalname.ics");
 		try{
 			assertEquals(expect.getName(),ICSFeedParser.getCalendarData(f).getName());
 		}
@@ -107,7 +107,7 @@ public class TestParser {
 	@Test
 	public void ParseWrongFormatCalendar(){
 		//The formating for calendar name and service ID is broken in this file.
-		File f = new File("wrongformat_c.ics");
+		File f = new File("resources/icsTestFiles/wrongformat_c.ics");
 		try{
 			ICSFeedParser.getCalendarData(f);
 		}
@@ -123,7 +123,7 @@ public class TestParser {
 	@Test
 	public void ParseWrongFormatEvents(){
 		//Event formatting (Begin and End) is broken
-		File f = new File("wrongformat_e.ics");
+		File f = new File("resources/icsTestFiles/wrongformat_e.ics");
 		try{
 			ICSFeedParser.getEvents(f);
 		}
@@ -138,7 +138,7 @@ public class TestParser {
 
 	@Test
 	public void ParseValidFileCalendar(){
-		File f = new File("valid.ics");
+		File f = new File("resources/icsTestFiles/valid.ics");
 		try{
 			ICSFeedParser.getCalendarData(f);
 		}
@@ -152,7 +152,7 @@ public class TestParser {
 
 	@Test
 	public void ParseValidFileEvents(){
-		File f = new File("valid.ics");
+		File f = new File("resources/icsTestFiles/valid.ics");
 		try{
 			ICSFeedParser.getEvents(f);
 		}

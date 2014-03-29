@@ -122,7 +122,7 @@ public class Event implements Serializable {
 	       c2.setTime(d2);
 	       c2.set(java.util.Calendar.SECOND, 0);
 	       c2.set(java.util.Calendar.MILLISECOND, 0);
-	       Date truncatedD2 = c1.getTime();
+	       Date truncatedD2 = c2.getTime();
 	       
 	       return truncatedD1.equals(truncatedD2);
 	}
