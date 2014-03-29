@@ -134,7 +134,7 @@ public class TestEvent {
 		Event c = a.build();
 		Event d = b.build();
 		
-		assertFalse(c.equals(d) && d.equals(c));
+		assertFalse(c.equals(d) || d.equals(c));
 		
 	}
 	
@@ -151,7 +151,7 @@ public class TestEvent {
 		Event c = a.build();
 		Event d = b.build();
 		
-		assertFalse(c.equals(d) && d.equals(c));
+		assertFalse(c.equals(d) || d.equals(c));
 		
 	}
 	
@@ -171,7 +171,7 @@ public class TestEvent {
 		Event c = a.build();
 		Event d = b.build();
 		
-		assertFalse(c.equals(d) && d.equals(c));
+		assertFalse(c.equals(d) || d.equals(c));
 		
 	}
 	
@@ -189,7 +189,7 @@ public class TestEvent {
 		Event c = a.build();
 		Event d = b.build();
 		
-		assertFalse(c.equals(d) && d.equals(c));
+		assertFalse(c.equals(d) || d.equals(c));
 		
 	}
 	
@@ -220,7 +220,7 @@ public class TestEvent {
 		Event c = a.build();
 		Event d = b.build();
 		
-		assertFalse(c.equals(d) && d.equals(c));
+		assertFalse(c.equals(d) || d.equals(c));
 		
 	}
 }
