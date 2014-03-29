@@ -1,3 +1,4 @@
+<%@page import="java.io.IOException"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page isELIgnored="false"%>
@@ -19,10 +20,14 @@
 	</c:if>
 
 	<%
-		if (TestEventPull.validateAccountIdentity(session, out)) {
-			ArrayList<Event> events = TestEventPush.testSuccessfulPushA(
-					session, out);
-			TestEventPull.testSuccessfulPull(session, out, events);
+		try {
+			if (TestEventPull.validateAccountIdentity(session, out)) {
+				ArrayList<Event> events = TestEventPush.testSuccessfulPushA(
+						session, out);
+				TestEventPull.testSuccessfulPull(session, out, events);
+			}
+		} catch(IOException e) {
+			out.println("Error communicating with Google's servers. Refresh this page to repeat the tests.");
 		}
 	%>
 
