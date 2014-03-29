@@ -1,0 +1,8 @@
+BEGIN:VCALENDAR
+-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-CALNAME:consolidated.calendar@gmail.com
+X-WR-TIMEZONE:America/Edmonton
+END:VCALENDAR
